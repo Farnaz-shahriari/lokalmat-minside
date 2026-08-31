@@ -92,7 +92,7 @@ export function ProductCard({
         className="flex-1 flex flex-col min-h-0 min-w-0 overflow-hidden"
         style={{ padding: "12px var(--space-md) var(--space-sm)", gap: "var(--space-sm)" }}
       >
-        <span className="label-xsmall overline text-on-surface-variant">{product.category}</span>
+        <span className="label-xsmall lm-overline text-on-surface-variant">{product.category}</span>
 
         <span className="title-medium text-on-surface truncate block" title={product.name}>
           {product.name}
@@ -122,7 +122,9 @@ export function ProductCard({
             visibility: product.levering.length > 0 ? "visible" : "hidden",
           }}
         >
-          <span className="label-xsmall overline text-on-surface-variant">Leveringsmuligheter</span>
+          {/* Sentence case, not uppercase: this is a plain block label rather than an
+              overline like the category above it. */}
+          <span className="label-xsmall text-on-surface-variant">Leveringsmuligheter</span>
           <div className="flex flex-wrap" style={{ gap: "var(--space-xs)" }}>
             {product.hasDirekte && <DeliveryPill icon="storefront" label="Direkte" />}
             {product.hasGrossist && <DeliveryPill icon="local_shipping" label="Grossist" />}

@@ -158,7 +158,7 @@ export function Sok() {
             <h1 className="font-brand-serif headline-medium text-on-surface m-0">{title}</h1>
             <div className="flex items-center flex-wrap" style={{ gap: "var(--space-sm)" }}>
               {activeSavedSearch && (
-                <span className="inline-flex items-center label-xsmall overline text-primary" style={{ gap: "var(--space-xs)" }}>
+                <span className="inline-flex items-center label-xsmall lm-overline text-primary" style={{ gap: "var(--space-xs)" }}>
                   <Icon name="bookmark" size={15} fill />
                   Lagret søk
                 </span>

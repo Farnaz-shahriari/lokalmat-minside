@@ -46,7 +46,7 @@ export function ProducerCard({
 
         {/* Middle */}
         <div className="flex-1 min-w-0 flex flex-col" style={{ gap: "var(--space-xs)" }}>
-          <span className="inline-flex items-center label-small overline text-on-surface-variant" style={{ gap: "var(--space-xs)", fontWeight: 700 }}>
+          <span className="inline-flex items-center label-small lm-overline text-on-surface-variant" style={{ gap: "var(--space-xs)", fontWeight: 700 }}>
             <Icon name="location_on" size={15} />
             {producer.region}
           </span>

@@ -76,13 +76,21 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
-   Overline, the 11px uppercase label style used heavily across the design.
-   Sizes and weights come from the design system's .label-xsmall; only the
+   Overline, the small uppercase label style used across the design (category on
+   ProductCard, region on ProducerCard, the "Lagret søk" marker). Sizes and
+   weights come from the design system's .label-xsmall / .label-small; only the
    uppercase transform and tracking are added here.
+
+   NAMED `lm-overline`, NOT `overline`, ON PURPOSE. Tailwind ships a built-in
+   `overline` utility that sets `text-decoration-line: overline`. Naming this
+   class `overline` collided with it, so every label using it was ALSO getting a
+   literal rule drawn above the text. Do not rename this back, and be careful
+   giving any custom class a name Tailwind already uses.
    -------------------------------------------------------------------------- */
-.overline {
+.lm-overline {
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-decoration: none;
 }
 
 /* -----------------------------------------------------------------------------
