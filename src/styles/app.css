@@ -168,3 +168,121 @@ body {
 :root {
   --motion-standard: cubic-bezier(0.2, 0, 0, 1);
 }
+
+/* -----------------------------------------------------------------------------
+   Snackbar, Material 3. See src/components/Snackbar.tsx for the token mapping
+   and why this is not built on the design system's `sonner`.
+   -------------------------------------------------------------------------- */
+.lm-snackbar-region {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--space-lg);
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--space-md);
+  pointer-events: none;
+}
+
+.lm-snackbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 48px;
+  min-width: 344px;
+  max-width: 672px;
+  padding: 10px var(--space-sm) 10px var(--space-md);
+  border-radius: var(--radius-sm);
+  /* M3 inverse-surface / inverse-on-surface, see the component header. */
+  background: var(--on-surface);
+  color: var(--surface);
+  pointer-events: auto;
+
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 200ms var(--motion-standard),
+    transform 200ms var(--motion-standard);
+}
+.lm-snackbar[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lm-snackbar__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lm-snackbar__action {
+  flex: 0 0 auto;
+  height: var(--height-md);
+  padding-inline: 12px;
+  border: 0;
+  border-radius: var(--radius-button);
+  background: transparent;
+  /* M3 inverse-primary, see the component header. */
+  color: var(--primary-container);
+  cursor: pointer;
+  transition: background-color 150ms var(--motion-standard);
+}
+.lm-snackbar__action:hover {
+  /* MD3 8% state layer, drawn in the action's own colour. */
+  background: color-mix(in srgb, var(--primary-container) 12%, transparent);
+}
+.lm-snackbar__action:focus-visible {
+  outline: 2px solid var(--primary-container);
+  outline-offset: 2px;
+}
+
+@media (max-width: 599px) {
+  .lm-snackbar {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Lingering rows, see src/components/Lingering.tsx and src/lib/useLinger.ts.
+   A row that the user just followed/saved holds its place, shows its new state,
+   then collapses away instead of vanishing under the cursor.
+   -------------------------------------------------------------------------- */
+.lm-linger {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows 320ms var(--motion-standard),
+    opacity 240ms var(--motion-standard),
+    margin-bottom 320ms var(--motion-standard);
+}
+.lm-linger__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.lm-linger[data-leaving="true"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  /* Cancel the parent's flex gap as the row collapses, so no hole is left. */
+  margin-bottom: calc(-1 * var(--lm-linger-gap, 0px));
+}
+
+.lm-linger-fade {
+  transition:
+    opacity 240ms var(--motion-standard),
+    transform 240ms var(--motion-standard);
+}
+.lm-linger-fade[data-leaving="true"] {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* Respect a reduced-motion preference: the row still holds its place so the
+   change is visible, it simply disappears without animating. */
+@media (prefers-reduced-motion: reduce) {
+  .lm-snackbar,
+  .lm-linger,
+  .lm-linger-fade {
+    transition: none;
+  }
+}

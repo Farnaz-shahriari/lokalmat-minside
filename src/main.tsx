@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { AppStateProvider } from "./state/AppState";
+import { SnackbarProvider } from "./components/Snackbar";
 /* MapLibre's own control/popup CSS. Imported from the package rather than a
    CDN so the map has no external dependency at runtime. */
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -17,9 +18,13 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {/* basename keeps routing correct under a GitHub Pages project path. */}
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <AppStateProvider>
-        <App />
-      </AppStateProvider>
+      {/* SnackbarProvider wraps AppStateProvider because the follow/save
+          actions in AppState raise the snackbar themselves. */}
+      <SnackbarProvider>
+        <AppStateProvider>
+          <App />
+        </AppStateProvider>
+      </SnackbarProvider>
     </BrowserRouter>
   </StrictMode>,
 );

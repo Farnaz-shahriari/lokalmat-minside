@@ -95,8 +95,42 @@ Routes: `/min-side` · `/produsenter` · `/produkter` · `/lagrede-sok` · `/sok
 | Fonts | **Google stand-ins** for the unlicensed Messina fonts. See below. |
 | Responsive | **Desktop-first with graceful stacking** at the system's breakpoints. No compact-breakpoint design exists yet. |
 | Nav tab cards | Kept **bespoke**. See Deviations. |
+| Follow / save feedback | Row **holds for 3s showing its new state**, then fades out, with an M3 snackbar + Angre. See below. |
 
 ---
+
+## Follow / save feedback
+
+Several lists are filtered by exactly the thing their own buttons toggle:
+"Produsenter i ditt område" shows producers you do *not* follow, "Mine produsenter" shows
+the ones you *do*, "Mine produkter" shows saved products. Toggling from inside one of
+those lists deleted the row you just clicked, instantly, with no confirmation — the
+prototype's behaviour, and disorienting.
+
+The standard fix, applied here:
+
+1. The row **stays put and renders its new state** (check / Følger / filled heart) for
+   3 seconds, so you see what you did.
+2. It then **fades and collapses** over 320ms, so the rows below slide up rather than
+   jumping.
+3. A **Material 3 snackbar** appears at the bottom — `Du følger nå Roma.` — with an
+   **Angre** action for 5 seconds.
+
+Undo reverts the change, cancels the fade, and restores the row in place.
+
+Two implementation notes worth knowing before changing this:
+
+- `src/lib/useLinger.ts` is **deliberately imperative** — a hold only starts when a
+  toggle handler calls `linger(key)`. An earlier version detected removals by diffing
+  the list, which was wrong: typing in a search box also removes rows, and those must
+  disappear at once rather than linger as ghosts. Verified: searching "roma" in Mine
+  produsenter drops 8 rows to 1 with zero lingering rows.
+- The **snackbar is raised inside `AppState`'s follow/save actions**, not at the call
+  sites, so every follow control in the app — the mini row's `+`, the producer card's
+  chip, the chip on a product card — gives identical feedback automatically.
+
+Counts and the map update immediately; only the row lingers. That is intentional — the
+numbers should always tell the truth.
 
 ## ⚠ Open issues and known gaps
 
@@ -213,6 +247,19 @@ documented as known gaps 6–8 in `references/colors.md`.
 
 **`chip.tsx` uses a raw radius.** `rounded-[8px]`, where the system's own rule says every
 rounded corner must use one of the four radius tokens.
+
+**There is no Material 3 snackbar in the library.** `sonner.tsx` is the nearest thing,
+but it hard-depends on `next-themes` (a Next.js theming library) and styles toasts as a
+*light* `--popover` card — an M3 snackbar is the opposite, an inverse-surface bar.
+Adopting it would have meant two extra dependencies and then overriding essentially all
+of its styling, so `src/components/Snackbar.tsx` is built directly on tokens instead. A
+real snackbar belongs in the design system; this one is a reasonable starting point.
+
+**M3's inverse-surface tokens are missing.** A snackbar needs `inverse-surface`,
+`inverse-on-surface` and `inverse-primary`, none of which are in `tokens.css`. We mapped
+them to `--on-surface` / `--surface` / `--primary-container`, which happen to be the
+correct inverse pair for LokalMat — but that mapping is an app-level guess and should be
+a real token trio, especially before another platform builds a snackbar.
 
 **Confirmed working:** the corrected `switch.tsx` renders LokalMat's `#A80000` when
 checked, not KSL olive. The `tokens.css` LokalMat block, including `--outline-variant`,

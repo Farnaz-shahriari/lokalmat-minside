@@ -30,9 +30,12 @@ import { useApp } from "../state/AppState";
 export function ProducerMini({
   producer,
   onOpen,
+  onFollowToggle,
 }: {
   producer: EnrichedProducer;
   onOpen?: () => void;
+  /** Lets the parent list hold this row in place before it leaves. */
+  onFollowToggle?: () => void;
 }) {
   const { toggleFollow } = useApp();
 
@@ -72,7 +75,10 @@ export function ProducerMini({
         className="shrink-0"
         aria-label={producer.followed ? `Slutt å følge ${producer.name}` : `Følg ${producer.name}`}
         aria-pressed={producer.followed}
-        onClick={() => toggleFollow(producer.id)}
+        onClick={() => {
+          onFollowToggle?.();
+          toggleFollow(producer.id);
+        }}
       >
         <Icon name={producer.followed ? "check" : "add"} size={20} />
       </Button>

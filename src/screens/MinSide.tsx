@@ -17,6 +17,8 @@ import { Icon } from "../components/Icon";
 import { CATEGORIES, COMMON_SEARCHES } from "../data/lokalmat-data";
 import { unfollowedCountText } from "../lib/format";
 import { emptyFilters } from "../lib/search";
+import { useLinger } from "../lib/useLinger";
+import { Lingering } from "../components/Lingering";
 import { useApp } from "../state/AppState";
 
 /* The Produsenter scope has its own chip set — these are producer-shaped
@@ -51,6 +53,13 @@ const SECTION_GAP = { marginTop: "var(--space-xl)" } as const;
 
 export function MinSide() {
   const navigate = useNavigate();
+
+  /* Following a producer removes it from "i ditt område" and adds a card to the
+     follow feed. Both lists hold the affected row briefly so the change is
+     visible before it moves. See src/lib/useLinger.ts. */
+  const areaLinger = useLinger();
+  const feedLinger = useLinger();
+
   const {
     producers,
     products,
@@ -91,7 +100,10 @@ export function MinSide() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
-  /* ---- c. Produsenter i ditt område. Only producers NOT followed. -------- */
+  /* ---- c. Produsenter i ditt område. Only producers NOT followed. --------
+     ...plus any the user just followed, held in place for a moment. The counter
+     and the map still reflect the true state immediately; it is only the row
+     that lingers, showing its new followed state before it collapses away. */
   const unfollowed = useMemo(() => producers.filter((p) => !p.followed), [producers]);
 
   const mapProducers: MapProducer[] = useMemo(
@@ -102,10 +114,20 @@ export function MinSide() {
   const inRadiusCount = mapProducers.filter((p) => p.inRadius).length;
 
   const nearbyList = useMemo(() => {
-    let list = mapProducers.filter((p) => p.inRadius);
-    if (mapCats.length) list = list.filter((p) => p.categories.some((c) => mapCats.includes(c)));
-    return list.sort((a, b) => a.distance - b.distance).slice(0, 8);
-  }, [mapProducers, mapCats]);
+    const inArea = producers
+      .filter((p) => p.distance <= mapRadius)
+      .filter((p) => !mapCats.length || p.categories.some((c) => mapCats.includes(c)))
+      .sort((a, b) => a.distance - b.distance);
+
+    // Keep at most 8 genuinely-unfollowed rows, and never drop a lingering one.
+    let shown = 0;
+    return inArea.filter((p) => {
+      if (p.followed) return areaLinger.isLingering(p.id);
+      return ++shown <= 8;
+    });
+    // areaLinger.version changes when a hold starts or ends.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [producers, mapRadius, mapCats, areaLinger.version, areaLinger.isLingering]);
 
   /* ---- d. Oppdateringer: one product per followed producer, preferring
             something new / updated / in season. ---------------------------- */
@@ -117,13 +139,14 @@ export function MinSide() {
       byProducer.set(p.producerId, arr);
     });
     return producers
-      .filter((pr) => pr.followed)
+      .filter((pr) => pr.followed || feedLinger.isLingering(pr.id))
       .map((pr) => {
         const own = byProducer.get(pr.id) ?? [];
         return own.find((p) => p.isNew || p.isUpdated || p.inSeason) ?? own[0];
       })
       .filter(Boolean);
-  }, [producers, products]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [producers, products, feedLinger.version, feedLinger.isLingering]);
 
   /* ---- e. Godkjent av REMA 1000 ----------------------------------------- */
   const approvedProducts = useMemo(
@@ -235,7 +258,13 @@ export function MinSide() {
           />
           <div className="flex flex-col" style={{ gap: "12px" }}>
             {nearbyList.map((p) => (
-              <ProducerMini key={p.id} producer={p} onOpen={() => openProducer(p.name)} />
+              <Lingering key={p.id} leaving={p.followed && areaLinger.isLeaving(p.id)} gap={12}>
+                <ProducerMini
+                  producer={p}
+                  onOpen={() => openProducer(p.name)}
+                  onFollowToggle={() => areaLinger.linger(p.id)}
+                />
+              </Lingering>
             ))}
           </div>
         </div>
@@ -247,7 +276,15 @@ export function MinSide() {
         <div className="lm-scroll-row flex overflow-x-auto pb-2.5" style={{ gap: "var(--space-md)" }}>
           {feedProducts.map((p) => (
             <div key={p.id} className="shrink-0 w-[320px]">
-              <ProductCard product={p} />
+              <Lingering
+                variant="fade"
+                leaving={!p.producerFollowed && feedLinger.isLeaving(p.producerId)}
+              >
+                <ProductCard
+                  product={p}
+                  onFollowToggle={() => feedLinger.linger(p.producerId)}
+                />
+              </Lingering>
             </div>
           ))}
         </div>

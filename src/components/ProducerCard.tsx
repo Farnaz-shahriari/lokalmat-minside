@@ -13,9 +13,12 @@ import { useApp } from "../state/AppState";
 export function ProducerCard({
   producer,
   onView,
+  onFollowToggle,
 }: {
   producer: EnrichedProducer;
   onView?: () => void;
+  /** Lets a parent list hold this card in place before it leaves. */
+  onFollowToggle?: () => void;
 }) {
   const { toggleFollow } = useApp();
 
@@ -83,7 +86,13 @@ export function ProducerCard({
               Se produsent
               <Icon name="arrow_forward" size={18} />
             </Button>
-            <FollowChip followed={producer.followed} onToggle={() => toggleFollow(producer.id)} />
+            <FollowChip
+              followed={producer.followed}
+              onToggle={() => {
+                onFollowToggle?.();
+                toggleFollow(producer.id);
+              }}
+            />
           </div>
         </div>
       </div>

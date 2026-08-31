@@ -39,7 +39,16 @@ function DeliveryPill({ icon, label }: { icon: string; label: string }) {
   );
 }
 
-export function ProductCard({ product }: { product: EnrichedProduct }) {
+export function ProductCard({
+  product,
+  onFollowToggle,
+  onSaveToggle,
+}: {
+  product: EnrichedProduct;
+  /** Lets a parent list hold this card in place before it leaves. */
+  onFollowToggle?: () => void;
+  onSaveToggle?: () => void;
+}) {
   const { toggleFollow, toggleSave } = useApp();
   const badge = statusBadge(product);
 
@@ -62,7 +71,10 @@ export function ProductCard({ product }: { product: EnrichedProduct }) {
         <div className="shrink-0">
           <FollowChip
             followed={product.producerFollowed}
-            onToggle={() => toggleFollow(product.producerId)}
+            onToggle={() => {
+              onFollowToggle?.();
+              toggleFollow(product.producerId);
+            }}
           />
         </div>
       </div>
@@ -146,7 +158,10 @@ export function ProductCard({ product }: { product: EnrichedProduct }) {
             className="ml-auto shrink-0"
             aria-label={product.saved ? "Fjern fra lagrede produkter" : "Lagre produkt"}
             aria-pressed={product.saved}
-            onClick={() => toggleSave(product.id)}
+            onClick={() => {
+              onSaveToggle?.();
+              toggleSave(product.id);
+            }}
           >
             <Icon
               name="favorite"

@@ -22,6 +22,8 @@ import { CATEGORIES } from "../data/lokalmat-data";
 import { matchProduct } from "../lib/search";
 import { compareNb } from "../lib/format";
 import { useApp, type ProductSort } from "../state/AppState";
+import { useLinger } from "../lib/useLinger";
+import { Lingering } from "../components/Lingering";
 
 const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
   { value: "recent", label: "Nylig lagt til" },
@@ -30,6 +32,9 @@ const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
 ];
 
 export function MineProdukter() {
+  /* Un-saving here deletes the card from this very list. Same treatment as the
+     follow lists. See src/lib/useLinger.ts. */
+  const linger = useLinger();
   const {
     products,
     productSearch,
@@ -45,7 +50,8 @@ export function MineProdukter() {
   const savedProducts = useMemo(() => products.filter((p) => p.saved), [products]);
 
   const visible = useMemo(() => {
-    let list = savedProducts
+    let list = products
+      .filter((p) => p.saved || linger.isLingering(String(p.id)))
       .filter((p) => matchProduct(p, productSearch))
       .filter((p) => !productFilters.length || productFilters.includes(p.category))
       .filter((p) => !onlyApproved || p.isApproved);
@@ -55,7 +61,9 @@ export function MineProdukter() {
       list = [...list].sort((a, b) => compareNb(a.producer, b.producer));
 
     return list;
-  }, [savedProducts, productSearch, productFilters, onlyApproved, productSort]);
+    // linger.version changes when a hold starts or ends.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products, productSearch, productFilters, onlyApproved, productSort, linger.version, linger.isLingering]);
 
   return (
     <div style={{ marginTop: "var(--space-xl)" }}>
@@ -118,7 +126,12 @@ export function MineProdukter() {
         <div className="flex flex-wrap" style={{ gap: "var(--space-md)" }}>
           {visible.map((p) => (
             <div key={p.id} className="w-[320px] shrink-0">
-              <ProductCard product={p} />
+              <Lingering variant="fade" leaving={!p.saved && linger.isLeaving(String(p.id))}>
+                <ProductCard
+                  product={p}
+                  onSaveToggle={() => linger.linger(String(p.id))}
+                />
+              </Lingering>
             </div>
           ))}
         </div>

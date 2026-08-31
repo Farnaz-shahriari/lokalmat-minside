@@ -29,6 +29,7 @@ import {
 } from "../data/lokalmat-data";
 import { enrichProducer, enrichProduct, type EnrichedProducer, type EnrichedProduct } from "../lib/enrich";
 import { sameFilters, toggleIn } from "../lib/search";
+import { useSnackbar } from "../components/Snackbar";
 
 export type Scope = "produkter" | "produsenter";
 export type ProductSort = "recent" | "name" | "producer";
@@ -115,6 +116,8 @@ const emptySearchState = (): SearchState => ({
 });
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
+  const { showSnackbar } = useSnackbar();
+
   const [followed, setFollowed] = useState<ReadonlySet<string>>(
     () => new Set(INITIAL_FOLLOWED),
   );
@@ -143,21 +146,60 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   );
   const [savedMessage, setSavedMessage] = useState("");
 
-  const toggleFollow = useCallback((id: string) => {
-    setFollowed((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  }, []);
+  /* Following and saving are optimistic and instant — no confirmation step, per
+     the design. What was missing was any confirmation AFTER the fact: because
+     several lists are filtered by exactly the flag their own buttons toggle, a
+     row could delete itself out from under the cursor with no feedback at all.
 
-  const toggleSave = useCallback((id: number) => {
-    setSaved((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  }, []);
+     Both toggles now raise a snackbar with an Angre action. The snackbar lives
+     here rather than at the call sites so that every follow button in the app —
+     the mini row, the producer card, the chip on a product card — gives the
+     same feedback automatically. `silent` exists only so that undoing does not
+     itself raise a second snackbar. */
+
+  const setFollow = useCallback(
+    (id: string, value: boolean, silent = false) => {
+      setFollowed((prev) => {
+        const next = new Set(prev);
+        value ? next.add(id) : next.delete(id);
+        return next;
+      });
+      if (silent) return;
+      const name = PRODUCERS.find((p) => p.id === id)?.name ?? "produsenten";
+      showSnackbar(
+        value ? `Du følger nå ${name}.` : `Du følger ikke lenger ${name}.`,
+        { actionLabel: "Angre", onAction: () => setFollow(id, !value, true) },
+      );
+    },
+    [showSnackbar],
+  );
+
+  const toggleFollow = useCallback(
+    (id: string) => setFollow(id, !followed.has(id)),
+    [setFollow, followed],
+  );
+
+  const setSave = useCallback(
+    (id: number, value: boolean, silent = false) => {
+      setSaved((prev) => {
+        const next = new Set(prev);
+        value ? next.add(id) : next.delete(id);
+        return next;
+      });
+      if (silent) return;
+      const name = PRODUCTS.find((p) => p.id === id)?.name ?? "Produktet";
+      showSnackbar(
+        value ? `${name} er lagret.` : `${name} er fjernet fra lagrede produkter.`,
+        { actionLabel: "Angre", onAction: () => setSave(id, !value, true) },
+      );
+    },
+    [showSnackbar],
+  );
+
+  const toggleSave = useCallback(
+    (id: number) => setSave(id, !saved.has(id)),
+    [setSave, saved],
+  );
 
   const producers = useMemo(
     () => PRODUCERS.map((p) => enrichProducer(p, followed)),

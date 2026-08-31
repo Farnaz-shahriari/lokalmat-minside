@@ -11,9 +11,14 @@ import { Icon } from "../components/Icon";
 import { CATEGORIES } from "../data/lokalmat-data";
 import { emptyFilters, matchProducer } from "../lib/search";
 import { useApp } from "../state/AppState";
+import { useLinger } from "../lib/useLinger";
+import { Lingering } from "../components/Lingering";
 
 export function MineProdusenter() {
   const navigate = useNavigate();
+  /* Unfollowing here deletes the card from this very list. Hold it a moment so
+     the change is visible first. See src/lib/useLinger.ts. */
+  const linger = useLinger();
   const {
     producers,
     producerSearch,
@@ -26,16 +31,23 @@ export function MineProdusenter() {
 
   const followed = useMemo(() => producers.filter((p) => p.followed), [producers]);
 
+  /* Built from ALL producers matching the search and category filters, then
+     narrowed to followed ones — plus any just-unfollowed row still lingering.
+     Filtering by search or category still removes rows immediately, which is
+     correct; only a follow toggle triggers the hold. */
   const visible = useMemo(
     () =>
-      followed
+      producers
         .filter((p) => matchProducer(p, producerSearch))
         .filter(
           (p) =>
             !producerFilters.length ||
             p.categories.some((c) => producerFilters.includes(c)),
-        ),
-    [followed, producerSearch, producerFilters],
+        )
+        .filter((p) => p.followed || linger.isLingering(p.id)),
+    // linger.version changes when a hold starts or ends.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [producers, producerSearch, producerFilters, linger.version, linger.isLingering],
   );
 
   /** Opens the search screen with empty filters and FORCES scope to Produsenter. */
@@ -90,7 +102,13 @@ export function MineProdusenter() {
       {visible.length > 0 ? (
         <div className="flex flex-col" style={{ gap: "var(--space-md)" }}>
           {visible.map((p) => (
-            <ProducerCard key={p.id} producer={p} onView={() => openProducer(p.name)} />
+            <Lingering key={p.id} leaving={!p.followed && linger.isLeaving(p.id)} gap={16}>
+              <ProducerCard
+                producer={p}
+                onView={() => openProducer(p.name)}
+                onFollowToggle={() => linger.linger(p.id)}
+              />
+            </Lingering>
           ))}
         </div>
       ) : (
