@@ -1,0 +1,366 @@
+/*
+ * Norsk Mat design system, canonical tokens.
+ * Covers colors, typography, spacing, and radius, source of truth for every
+ * value here is references/colors.md, references/typography.md, and
+ * references/spacing.md, all derived from the real Figma variable exports
+ * and the KSL Foretak app codebase, not the live app's own CSS.
+ *
+ * This file exists because the live app has real, confirmed gaps.
+ * Colors, missing --outline entirely, missing --outline-variant for three
+ * of four platforms, and an incomplete @theme mapping that leaves outline,
+ * surface, and severity tokens unusable as Tailwind classes even though
+ * the raw CSS variables existed.
+ * Typography and spacing, the named type classes, the spacing scale, the
+ * height scale, and the radius tokens existed only as markdown tables,
+ * nothing implemented them anywhere, button.tsx and the input family
+ * already reference var(--radius-button) directly, it was simply never
+ * defined until now.
+ *
+ * Apply one .theme-<platform> class to the root element to switch
+ * platforms, the shared type, spacing, and severity tokens below apply
+ * to all of them automatically.
+ */
+
+:root,
+.theme-ksl {
+  --font-family: 'Manrope', 'Work Sans', 'Poppins', sans-serif;
+
+  --primary: #4A671E;
+  --primary-foreground: #FFFFFF;
+  --primary-container: #EFF1E7;
+  --primary-container-foreground: #284000;
+
+  --secondary: #365BAE;
+  --secondary-foreground: #FFFFFF;
+  --secondary-container: #DAE2FF;
+  --secondary-container-foreground: #174295;
+
+  --tertiary: #005D21;
+  --tertiary-foreground: #FFFFFF;
+  --tertiary-container: #B3F2B3;
+  --tertiary-container-foreground: #00531C;
+
+  --background: #FFFFFF;
+  --foreground: #1A1C16;
+  --surface: #FFFFFF;
+  --on-surface: #1A1C16;
+  --surface-variant: #E0E4D3;
+  --on-surface-variant: #44483B;
+  --outline: #74796A;
+  --outline-variant: #C4C8B7;
+  --surface-bright: #FAFAF0;
+  --surface-dim: #DADBD1;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F4F4EA;
+  --surface-container: #EEEEE4;
+  --surface-container-high: #E9E9DF;
+  --surface-container-highest: #E3E3D9;
+}
+
+.theme-nyt-norge {
+  --font-family: 'Manrope', 'Work Sans', 'Poppins', sans-serif;
+
+  --primary: #00319E;
+  --primary-foreground: #FFFFFF;
+  --primary-container: #DCE1FF;
+  --primary-container-foreground: #0039B5;
+
+  --secondary: #446900;
+  --secondary-foreground: #FFFFFF;
+  --secondary-container: #C3E196;
+  --secondary-container-foreground: #213600;
+
+  --tertiary: #4D6629;
+  --tertiary-foreground: #FFFFFF;
+  --tertiary-container: #C9E79B;
+  --tertiary-container-foreground: #344B11;
+
+  --background: #FFFFFF;
+  --foreground: #1A1B23;
+  --surface: #FFFFFF;
+  --on-surface: #1A1B23;
+  --surface-variant: #E0E1F4;
+  --on-surface-variant: #434655;
+  --outline: #747686;
+  --outline-variant: #C4C5D7;
+  --surface-bright: #FAF8FF;
+  --surface-dim: #D9D9E4;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F3F2FE;
+  --surface-container: #EDEDF8;
+  --surface-container-high: #E8E7F3;
+  --surface-container-highest: #E2E1ED;
+}
+
+.theme-spesialitet {
+  --font-family: 'Manrope', 'Work Sans', 'Poppins', sans-serif;
+
+  --primary: #594414;
+  --primary-foreground: #FFFFFF;
+  --primary-container: #E5DBC9;
+  --primary-container-foreground: #221700;
+
+  --secondary: #212222;
+  --secondary-foreground: #FFFFFF;
+  --secondary-container: #424242;
+  --secondary-container-foreground: #DAD8D7;
+
+  --tertiary: #6B5D3E;
+  --tertiary-foreground: #FFFFFF;
+  --tertiary-container: #D3C19B;
+  --tertiary-container-foreground: #3E3217;
+
+  --background: #EFEADF;
+  --foreground: #1E1B17;
+  --surface: #EFEADF;
+  --on-surface: #1E1B17;
+  --surface-variant: #ECE1D1;
+  --on-surface-variant: #4D463A;
+  --outline: #7E7669;
+  --outline-variant: #D0C5B6;
+  --surface-bright: #FFF8F2;
+  --surface-dim: #E0D9D2;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #FAF2EB;
+  --surface-container: #F4EDE5;
+  --surface-container-high: #EEE7E0;
+  --surface-container-highest: #E8E1DA;
+}
+
+.theme-lokalmat {
+  /* Messina Serif and Sands are not yet licensed or loaded anywhere, in
+     either the design file or any codebase. Until the real font files are
+     available, this falls back to Georgia so headings do not silently
+     drop to a generic system sans, replace the moment you have the files. */
+  --font-family: 'Messina Serif', 'Sands', Georgia, serif;
+
+  --primary: #A80000;
+  --primary-foreground: #FFFFFF;
+  --primary-container: #E69D9D;
+  --primary-container-foreground: #330000;
+
+  --secondary: #0D310D;
+  --secondary-foreground: #FFFFFF;
+  --secondary-container: #B1E6B1;
+  --secondary-container-foreground: #0E330E;
+
+  --tertiary: #424242;
+  --tertiary-foreground: #FFFFFF;
+  --tertiary-container: #E6E6E6;
+  --tertiary-container-foreground: #333333;
+
+  --background: #FFFFFF;
+  --foreground: #1B1C1A;
+  --surface: #FFFFFF;
+  --on-surface: #1B1C1A;
+  --surface-variant: #DFE4DC;
+  --on-surface-variant: #434842;
+  --outline: #737872;
+  --outline-variant: #C3C8C0;
+  --surface-bright: #FBF9F6;
+  --surface-dim: #DBDAD7;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F5F3F0;
+  --surface-container: #EFEEEB;
+  --surface-container-high: #E9E8E5;
+  --surface-container-highest: #E4E2DF;
+}
+
+/* Shared, semantic, identical across every platform, do not vary these
+   per .theme-* block. */
+:root {
+  --error: #BA1A1A;
+  --error-foreground: #FFFFFF;
+  --error-container: #FFDAD6;
+  --error-container-foreground: #410002;
+
+  --vesentlig: #A84300;
+  --vesentlig-foreground: #FFFFFF;
+  --vesentlig-container: #FDD19F;
+  --vesentlig-container-foreground: #3D2100;
+
+  --mindre-alvorlig: #705400;
+  --mindre-alvorlig-foreground: #FFFFFF;
+  --mindre-alvorlig-container: #FFEDD0;
+  --mindre-alvorlig-container-foreground: #3D2E00;
+
+  /* Type scale, references/typography.md, shared across every platform,
+     only the font family itself changes per .theme-* block above. */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --text-4xl: 57px;
+  --text-2xl: 32px;
+  --text-xl: 24px;
+  --text-lg: 22px;
+  --text-md: 18px;
+  --text-base: 16px;
+  --text-sm: 14px;
+
+  /* Spacing scale, references/spacing.md, base unit 4px */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 48px;
+
+  /* Component height scale, references/spacing.md */
+  --height-sm: 32px;
+  --height-md: 40px;
+  --height-lg: 56px;
+
+  /* Radius tokens, references/spacing.md. --radius-button is already
+     referenced directly by the component library, button.tsx and every
+     input variant use rounded-[var(--radius-button)], it was simply
+     never defined anywhere until now. */
+  --radius-sm: 4px;
+  --radius-button: 100px;
+  --radius-card: 12px;
+  --radius-dialog: 28px;
+
+  /* Common aliases used across the shared component library */
+  --card: var(--surface);
+  --card-foreground: var(--on-surface);
+  --popover: var(--surface-container);
+  --popover-foreground: var(--on-surface);
+  --muted: var(--surface-container);
+  --muted-foreground: var(--on-surface-variant);
+  --accent: var(--secondary-container);
+  --accent-foreground: var(--secondary-container-foreground);
+  --destructive: var(--error);
+  --destructive-foreground: var(--error-foreground);
+  --border: var(--outline-variant);
+  --input: var(--surface-container-highest);
+  --ring: var(--primary);
+}
+
+/* Named type styles, references/typography.md, ranked by real usage in
+   the app, body and label sizes dominate, headline barely appears.
+   font-family is intentionally var(--font-family), not hardcoded to
+   Manrope, so these classes automatically pick up LokalMat's Messina
+   Serif and Sands once those files actually exist, no separate rule
+   needed per platform. */
+.headline-medium {
+  font-family: var(--font-family);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+.title-large {
+  font-family: var(--font-family);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+.title-medium {
+  font-family: var(--font-family);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+}
+.body-large {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+.body-medium {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+.label-large {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+.label-medium {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+.label-small {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 16px;
+}
+.label-xsmall {
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  line-height: 14px;
+}
+
+/* Tailwind v4 @theme mapping, this is the piece that was missing in the
+   live app, outline, outline-variant, the full surface family, and the
+   two new severity tokens were never exposed as Tailwind classes even
+   though the raw CSS variables existed. Without this block, classes like
+   bg-surface-variant or border-outline-variant silently do nothing. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-container: var(--primary-container);
+  --color-primary-container-foreground: var(--primary-container-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-container: var(--secondary-container);
+  --color-secondary-container-foreground: var(--secondary-container-foreground);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-tertiary-container-foreground: var(--tertiary-container-foreground);
+
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-container: var(--error-container);
+  --color-error-container-foreground: var(--error-container-foreground);
+
+  --color-vesentlig: var(--vesentlig);
+  --color-vesentlig-foreground: var(--vesentlig-foreground);
+  --color-vesentlig-container: var(--vesentlig-container);
+  --color-vesentlig-container-foreground: var(--vesentlig-container-foreground);
+
+  --color-mindre-alvorlig: var(--mindre-alvorlig);
+  --color-mindre-alvorlig-foreground: var(--mindre-alvorlig-foreground);
+  --color-mindre-alvorlig-container: var(--mindre-alvorlig-container);
+  --color-mindre-alvorlig-container-foreground: var(--mindre-alvorlig-container-foreground);
+
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-surface-variant: var(--surface-variant);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
