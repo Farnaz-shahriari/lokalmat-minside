@@ -114,15 +114,53 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
-   Leaflet, kept inside the design system's type and radius system.
+   MapLibre GL, pulled inside the design system's type, colour and radius rules.
+   The library ships its own default chrome; these rules re-skin the parts that
+   are visible (zoom buttons, attribution, tooltips) so the map does not look
+   like a third-party widget dropped into the page.
    -------------------------------------------------------------------------- */
-.leaflet-container {
+.maplibregl-map {
   font-family: var(--font-family);
   background: var(--surface-container);
 }
-.leaflet-bar a,
-.leaflet-control-attribution {
+
+/* Zoom control, matched to the design system's button surface and radius. */
+.maplibregl-ctrl-group {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--outline-variant);
+}
+.maplibregl-ctrl-group button:hover {
+  background: var(--surface-container-low);
+}
+
+.maplibregl-ctrl-attrib {
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+}
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib a {
   color: var(--on-surface-variant);
+}
+
+/* Producer tooltips. Matches the label-small type style. */
+.lm-map-popup .maplibregl-popup-content {
+  background: var(--on-surface);
+  color: var(--surface);
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 16px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+.lm-map-popup .maplibregl-popup-tip {
+  border-top-color: var(--on-surface);
+  border-bottom-color: var(--on-surface);
 }
 
 /* MD3 motion, the one easing curve named in the handoff. State changes are

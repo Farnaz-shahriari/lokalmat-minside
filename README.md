@@ -36,7 +36,7 @@ Then open http://localhost:5173. Other scripts: `npm run build`, `npm run previe
 
 ## Stack
 
-React 18 · TypeScript · Vite 6 · Tailwind CSS v4 · React Router 6 · Leaflet 1.9.4
+React 18 · TypeScript · Vite 6 · Tailwind CSS v4 · React Router 6 · MapLibre GL 4
 
 Chosen to match the design system: its components are `.tsx`, and its `tokens.css`
 already uses Tailwind v4's `@theme inline`. The build is fully static, so it hosts
@@ -116,15 +116,29 @@ swapping in the real files. The whole change is confined to that one file.
 Serif is used in exactly **three** places (greeting h1, search page title, producer name
 on ProducerCard) and nowhere else. Do not widen it.
 
-### 2. The map basemap was changed
+### 2. The map uses OpenFreeMap, not CARTO
 
-The handoff specifies CARTO `light_all` tiles and flags "confirm the CARTO licence".
-That question answered itself: **CARTO's keyless tiles now render an "API KEY REQUIRED"
-watermark across every tile.**
+The handoff specifies CARTO `light_all` (Positron) and flags "confirm the CARTO
+licence". That question answered itself: **CARTO's keyless tiles now render a large
+"API KEY REQUIRED" watermark across every tile.** Positron is no longer available
+without a paid CARTO account.
 
-We took the alternative the handoff itself named — **Kartverket `topograatone`**, a
-free, openly-licensed Norwegian government basemap and the closest visual match. The
-CARTO configuration is kept commented in `src/components/MapPanel.tsx` if you get a key.
+The map now uses **OpenFreeMap Positron** — an open, community-run rebuild of the very
+same Positron style, so the design's intended look is *preserved exactly* rather than
+approximated. Free forever, no API key, no signup, no rate limits, OpenStreetMap data,
+and self-hostable if you ever want the tiles on your own infrastructure.
+
+Positron is served as **vector** tiles, which is why the map uses MapLibre GL rather
+than Leaflet's raster layers. Vector also keeps the map crisp at every zoom level and
+on high-DPI screens.
+
+Kartverket's `topograatone` was tried first and rejected: it is a *topographic* map, so
+terrain shading and contour tints made it far warmer and busier than the flat basemap
+the design calls for.
+
+MapLibre needs WebGL. Where it is unavailable (locked-down VDI, very old browser) the
+map degrades to a labelled placeholder and the radius slider keeps working, rather than
+breaking the page.
 
 ### 3. Org.nr is fake
 

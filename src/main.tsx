@@ -3,6 +3,9 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { AppStateProvider } from "./state/AppState";
+/* MapLibre's own control/popup CSS. Imported from the package rather than a
+   CDN so the map has no external dependency at runtime. */
+import "maplibre-gl/dist/maplibre-gl.css";
 import "./styles/app.css";
 
 /* .theme-lokalmat is what selects this platform's tokens out of the design
