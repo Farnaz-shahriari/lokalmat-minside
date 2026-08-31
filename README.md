@@ -96,6 +96,7 @@ Routes: `/min-side` · `/produsenter` · `/produkter` · `/lagrede-sok` · `/sok
 | Responsive | **Desktop-first with graceful stacking** at the system's breakpoints. No compact-breakpoint design exists yet. |
 | Nav tab cards | Kept **bespoke**. See Deviations. |
 | Follow / save feedback | Row **holds for 3s showing its new state**, then fades out, with an M3 snackbar + Angre. See below. |
+| Category filter chips | **Faceted** on Mine produsenter and Mine produkter — only categories with something behind them are offered. See below. |
 
 ---
 
@@ -131,6 +132,37 @@ Two implementation notes worth knowing before changing this:
 
 Counts and the map update immediately; only the row lingers. That is intentional — the
 numbers should always tell the truth.
+
+## Category filter chips are faceted
+
+On **Mine produsenter** and **Mine produkter** the chip row only offers categories that
+actually have something behind them. Previously all 12 were always shown, so you could
+pick "Fjærkre" on a list with no poultry in it and get nothing but an empty state — a
+filter that can only ever return zero results is a dead end.
+
+The facet is computed from the set filtered by everything **except** the category
+filter. That detail is what makes it usable:
+
+- Selecting "Kjøtt" narrows the results but **does not** remove the other category
+  chips — otherwise you could never pick a second one. This is the classic multi-select
+  faceting trap.
+- Typing in the search box **does** narrow the chips, which is what you want.
+- A category that is already selected stays visible even if it stops matching anything,
+  so an active filter can always be cleared. Without this, searching while a category is
+  selected would hide the filter that is causing the empty result.
+
+When no categories are left to offer, the row renders nothing rather than an empty gap.
+
+**Not applied to two other chip/filter groups, deliberately:**
+
+- **Min side → "Produsenter i ditt område".** Its set changes continuously as the radius
+  slider is dragged, so faceting would make chips appear and disappear under the user's
+  hand. It also shows only the first 6 categories by design.
+- **The Søk sidebar's Kategori group.** That searches all products nationally, so nearly
+  every category has hits, and it interacts with five other filter groups — faceting
+  there is a larger design question about whether all six groups should facet together.
+
+Both are easy to extend if you want them.
 
 ## ⚠ Open issues and known gaps
 

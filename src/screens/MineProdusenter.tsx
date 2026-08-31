@@ -35,19 +35,36 @@ export function MineProdusenter() {
      narrowed to followed ones — plus any just-unfollowed row still lingering.
      Filtering by search or category still removes rows immediately, which is
      correct; only a follow toggle triggers the hold. */
-  const visible = useMemo(
+  /* Everything except the category filter. This is the facet base: the set the
+     category chips are derived from, and the set they then narrow. */
+  const beforeCategoryFilter = useMemo(
     () =>
       producers
         .filter((p) => matchProducer(p, producerSearch))
-        .filter(
-          (p) =>
-            !producerFilters.length ||
-            p.categories.some((c) => producerFilters.includes(c)),
-        )
         .filter((p) => p.followed || linger.isLingering(p.id)),
     // linger.version changes when a hold starts or ends.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [producers, producerSearch, producerFilters, linger.version, linger.isLingering],
+    [producers, producerSearch, linger.version, linger.isLingering],
+  );
+
+  /* Only offer categories that actually have producers behind them. Derived
+     from the set filtered by everything EXCEPT category, so selecting one chip
+     does not hide the others. A selected category stays visible even if it stops
+     matching, so an active filter can always be cleared. See the matching
+     comment in MineProdukter. */
+  const availableCategories = useMemo(() => {
+    const present = new Set(beforeCategoryFilter.flatMap((p) => p.categories));
+    return CATEGORIES.filter((c) => present.has(c) || producerFilters.includes(c));
+  }, [beforeCategoryFilter, producerFilters]);
+
+  const visible = useMemo(
+    () =>
+      beforeCategoryFilter.filter(
+        (p) =>
+          !producerFilters.length ||
+          p.categories.some((c) => producerFilters.includes(c)),
+      ),
+    [beforeCategoryFilter, producerFilters],
   );
 
   /** Opens the search screen with empty filters and FORCES scope to Produsenter. */
@@ -93,7 +110,7 @@ export function MineProdusenter() {
 
       <div style={{ marginBottom: "var(--space-lg)" }}>
         <CategoryChips
-          categories={CATEGORIES}
+          categories={availableCategories}
           selected={producerFilters}
           onToggle={toggleProducerFilter}
         />

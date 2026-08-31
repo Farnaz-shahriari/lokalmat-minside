@@ -49,21 +49,46 @@ export function MineProdukter() {
 
   const savedProducts = useMemo(() => products.filter((p) => p.saved), [products]);
 
+  /* Everything except the category filter. This is the facet base: the set the
+     category chips are derived from, and the set they then narrow. */
+  const beforeCategoryFilter = useMemo(
+    () =>
+      products
+        .filter((p) => p.saved || linger.isLingering(String(p.id)))
+        .filter((p) => matchProduct(p, productSearch))
+        .filter((p) => !onlyApproved || p.isApproved),
+    // linger.version changes when a hold starts or ends.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products, productSearch, onlyApproved, linger.version, linger.isLingering],
+  );
+
+  /* Only offer categories that actually have something behind them — a chip
+     that can only ever produce an empty state is a dead end.
+
+     Derived from the set filtered by everything EXCEPT category, which is what
+     makes this behave: selecting "Oster" must not remove the other category
+     chips, or you could never pick a second one. Narrowing the search box does
+     narrow the chips, which is correct.
+
+     An already-selected category is always kept visible even if it no longer
+     matches anything, otherwise an active filter would become invisible and the
+     user would have no way to clear it. */
+  const availableCategories = useMemo(() => {
+    const present = new Set(beforeCategoryFilter.map((p) => p.category));
+    return CATEGORIES.filter((c) => present.has(c) || productFilters.includes(c));
+  }, [beforeCategoryFilter, productFilters]);
+
   const visible = useMemo(() => {
-    let list = products
-      .filter((p) => p.saved || linger.isLingering(String(p.id)))
-      .filter((p) => matchProduct(p, productSearch))
-      .filter((p) => !productFilters.length || productFilters.includes(p.category))
-      .filter((p) => !onlyApproved || p.isApproved);
+    let list = beforeCategoryFilter.filter(
+      (p) => !productFilters.length || productFilters.includes(p.category),
+    );
 
     if (productSort === "name") list = [...list].sort((a, b) => compareNb(a.name, b.name));
     else if (productSort === "producer")
       list = [...list].sort((a, b) => compareNb(a.producer, b.producer));
 
     return list;
-    // linger.version changes when a hold starts or ends.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, productSearch, productFilters, onlyApproved, productSort, linger.version, linger.isLingering]);
+  }, [beforeCategoryFilter, productFilters, productSort]);
 
   return (
     <div style={{ marginTop: "var(--space-xl)" }}>
@@ -116,7 +141,7 @@ export function MineProdukter() {
 
       <div style={{ marginBottom: "var(--space-lg)" }}>
         <CategoryChips
-          categories={CATEGORIES}
+          categories={availableCategories}
           selected={productFilters}
           onToggle={toggleProductFilter}
         />
