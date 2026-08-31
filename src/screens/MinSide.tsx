@@ -32,6 +32,21 @@ const PRODUSENT_SEARCHES = [
   { label: "Innlandet", query: "Innlandet" },
 ];
 
+/* The dataset ships 5 common searches. Only the first 4 are shown, so the
+   suggestion chips always sit on a single line at this page width.
+
+   Worth knowing before changing this number: our chips are already identical to
+   the design's (14px/500, 32px tall, 16px side padding, 8px radius, 1px
+   outline-variant border) — measured against the visual reference. The design
+   fits all 5 on one line only because its search box is ~48px wider than ours,
+   a knock-on effect of the 1280px page-width decision. So the fix is fewer
+   chips, not smaller ones.
+
+   The dropped entry is the longest, "Sesongbaserte produkter i nærheten", which
+   also overlaps in meaning with "Kortreiste grønnsaker sesong". The dataset is
+   left intact so nothing is lost if the layout changes later. */
+const HOME_SUGGESTION_LIMIT = 4;
+
 const SECTION_GAP = { marginTop: "var(--space-xl)" } as const;
 
 export function MinSide() {
@@ -62,7 +77,7 @@ export function MinSide() {
     : "Hva leter du etter? F.eks. «økologisk melk Rogaland»";
   const scopeSearches = isProdusenter
     ? PRODUSENT_SEARCHES
-    : COMMON_SEARCHES.map((c) => ({ label: c, query: c }));
+    : COMMON_SEARCHES.slice(0, HOME_SUGGESTION_LIMIT).map((c) => ({ label: c, query: c }));
 
   /** Run a query from the home box.
       The current scope tab is CARRIED OVER, not reset — searching from the
