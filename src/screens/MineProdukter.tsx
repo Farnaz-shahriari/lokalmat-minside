@@ -125,7 +125,7 @@ export function MineProdukter() {
 
         <div className="w-[200px] ml-auto">
           <Select value={productSort} onValueChange={(v) => setProductSort(v as ProductSort)}>
-            <SelectTrigger aria-label="Sorter etter" className="w-full">
+            <SelectTrigger aria-label="Sorter etter" className="w-full body-medium">
               <SelectValue placeholder="Sorter etter" />
             </SelectTrigger>
             <SelectContent>

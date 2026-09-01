@@ -255,8 +255,8 @@ export function Sok() {
                 style={{ paddingBlock: "var(--space-md)" }}
               >
                 <h3
-                  className="body-medium text-on-surface m-0"
-                  style={{ fontWeight: 700, marginBottom: "var(--space-xs)" }}
+                  className="label-large text-on-surface m-0"
+                  style={{ marginBottom: "var(--space-xs)" }}
                 >
                   {g.title}
                 </h3>
@@ -291,7 +291,7 @@ export function Sok() {
               style={{ marginBottom: "12px", borderRadius: "var(--radius-card)" }}
             >
               <Icon name="check_circle" size={20} fill />
-              <AlertDescription className="text-secondary-container-foreground">
+              <AlertDescription className="body-medium text-secondary-container-foreground">
                 Søket «{savedMessage}» er lagret. Du finner det under Lagrede søk.
               </AlertDescription>
             </Alert>

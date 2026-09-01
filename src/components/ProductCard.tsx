@@ -101,7 +101,7 @@ export function ProductCard({
         {/* EPD number + at most one status badge, one line, min 18px */}
         <div className="flex items-center min-h-[18px] flex-nowrap overflow-hidden" style={{ gap: "var(--space-xs)" }}>
           {product.epd && (
-            <span className="label-small text-primary whitespace-nowrap" style={{ fontWeight: 700 }}>
+            <span className="label-small text-primary whitespace-nowrap">
               {product.epdLabel}
             </span>
           )}

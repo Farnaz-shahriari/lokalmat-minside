@@ -76,6 +76,29 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
+   Gap fill: .headline-small (24px)
+   references/typography.md lists 24px as a REAL size in use ("close to text-xl,
+   24px, 7 usages") and tokens.css defines --text-xl: 24px — but there is no
+   NAMED class for it, so the producer name on ProducerCard had nowhere to live
+   and was being set with inline font-size + line-height.
+
+   This is exactly the design handoff's Open Question 5: "Serif at 24px and 40px.
+   Neither is in the named type scale. Add headline-small (24) and display-small
+   (40), or round both to headline-medium (32)?" Defined here as headline-small so
+   the usage is tokenised rather than inline. Line height 1.25 gives 30px at 24px,
+   which is what the handoff specifies (24/30).
+
+   FLAG FOR UPSTREAM: this belongs in tokens.css alongside the other named styles,
+   once the design team answers that question.
+   -------------------------------------------------------------------------- */
+.headline-small {
+  font-family: var(--font-family);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.25;
+}
+
+/* -----------------------------------------------------------------------------
    Overline, the small uppercase label style used across the design (category on
    ProductCard, region on ProducerCard, the "Lagret søk" marker). Sizes and
    weights come from the design system's .label-xsmall / .label-small; only the

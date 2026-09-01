@@ -33,7 +33,7 @@ export function SavedSearchCard({
     >
       {/* 44px count badge, primary-container */}
       <div className="shrink-0 w-11 h-11 rounded-full bg-primary-container flex items-center justify-center">
-        <span className="title-medium text-primary-container-foreground" style={{ fontWeight: 700 }}>
+        <span className="title-medium text-primary-container-foreground">
           {search.count}
         </span>
       </div>

@@ -37,7 +37,7 @@ export function ProducerCard({
           <Icon name={producer.tint.icon} size={60} style={{ color: producer.tint.ink, opacity: 0.5 }} />
           <span
             className="absolute inline-flex items-center label-xsmall"
-            style={{ left: 10, bottom: 8, gap: 3, color: producer.tint.ink, opacity: 0.85, fontWeight: 700 }}
+            style={{ left: 10, bottom: 8, gap: 3, color: producer.tint.ink, opacity: 0.85 }}
           >
             <Icon name="distance" size={14} />
             {producer.distance} km
@@ -46,13 +46,13 @@ export function ProducerCard({
 
         {/* Middle */}
         <div className="flex-1 min-w-0 flex flex-col" style={{ gap: "var(--space-xs)" }}>
-          <span className="inline-flex items-center label-small lm-overline text-on-surface-variant" style={{ gap: "var(--space-xs)", fontWeight: 700 }}>
+          <span className="inline-flex items-center label-small lm-overline text-on-surface-variant" style={{ gap: "var(--space-xs)" }}>
             <Icon name="location_on" size={15} />
             {producer.region}
           </span>
 
           {/* SERIF, 24px. One of the three sanctioned serif usages. */}
-          <span className="font-brand-serif text-on-surface" style={{ fontSize: "var(--text-xl)", lineHeight: "30px" }}>
+          <span className="font-brand-serif headline-small text-on-surface">
             {producer.name}
           </span>
 

@@ -81,8 +81,11 @@ export function TopBar() {
           aria-label={`Varsler, ${NOTIFICATION_COUNT} nye`}
         >
           <Icon name="notifications" className="text-on-surface-variant" />
+          {/* label-xsmall (11px) is the floor of the type scale — the prototype's
+              10px/700 is below it, so the count uses the smallest named style and
+              is centred by flex rather than a hand-set line-height. */}
           <span
-            className="absolute flex items-center justify-center bg-primary text-primary-foreground"
+            className="absolute flex items-center justify-center bg-primary text-primary-foreground label-xsmall"
             style={{
               top: -3,
               right: -3,
@@ -90,9 +93,6 @@ export function TopBar() {
               height: 16,
               paddingInline: 4,
               borderRadius: "var(--radius-button)",
-              fontSize: 10,
-              fontWeight: 700,
-              lineHeight: "16px",
             }}
           >
             {NOTIFICATION_COUNT}
