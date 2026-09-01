@@ -92,7 +92,7 @@ Routes: `/min-side` · `/produsenter` · `/produkter` · `/lagrede-sok` · `/sok
 |---|---|
 | Page width | **1280px**, per the handoff, not `spacing.md`'s 1680px. See Deviations. |
 | Category tints | Kept as **dataset-owned decorative data**, isolated in one file. |
-| Fonts | **Google stand-ins** for the unlicensed Messina fonts. See below. |
+| Fonts | **Real Messina Sans + Serif**, self-hosted from the organisation's own licensed webfont builds. See below. |
 | Responsive | **Desktop-first with graceful stacking** at the system's breakpoints. No compact-breakpoint design exists yet. |
 | Nav tab cards | Kept **bespoke**. See Deviations. |
 | Follow / save feedback | Row **holds for 3s showing its new state**, then fades out, with an M3 snackbar + Angre. See below. |
@@ -166,18 +166,32 @@ Both are easy to extend if you want them.
 
 ## ⚠ Open issues and known gaps
 
-### 1. Fonts are stand-ins, not the brand typefaces
+### 1. Fonts are the real brand faces — one licence detail to confirm
 
-LokalMat's real fonts are **Messina Serif** and **Messina Sans** (Luzi Type,
-commercially licensed). They are not in any repository — logged as known gap #9 in the
-design system's `references/colors.md`.
+LokalMat's brand typefaces are **Messina Sans** and **Messina Serif** (Luzi Type).
+They are commercial, licensed faces — there is no free version, and font sites offering
+them as free downloads are redistributing them without the foundry's permission.
 
-We substituted **Source Serif 4** and **Inter** from Google Fonts so headings do not
-collapse into a generic system font. **Anything typeset here is approximately, not
-exactly, on-brand — do not present a screenshot as final brand typography.**
+**The organisation already licenses them.** The live lokalmat.no bundle serves its own
+licensed webfont builds (`MessinaSansWeb-*`, `MessinaSerifWeb-*` — the `Web` infix is
+Luzi Type's webfont naming). Those files are now self-hosted in this repo under
+`src/styles/fonts/`, declared in `src/styles/fonts.css`, and Vite emits them as hashed
+assets so they resolve under any base path.
 
-`src/styles/fonts.css` carries the full explanation and a six-step checklist for
-swapping in the real files. The whole change is confined to that one file.
+**⚠ Confirm with whoever holds the licence:** webfont licences are normally scoped by
+domain and monthly pageviews. Min side is on lokalmat.no so it is very likely inside
+scope, but that needs confirming — and if Min side lifts traffic materially the pageview
+tier may need raising. Organisational question, not a code one.
+
+**🟡 Messina Sans has no Medium (500) in the deployed set.** Available weights are
+Sans 400/700 and Serif 400/600/700. The design system's type scale uses 500 throughout
+(`label-medium`, `label-large`, `title-medium`, `title-large`), so `fonts.css` pins
+`--font-weight-medium: 400` and `--font-weight-semibold: 700` for LokalMat rather than
+leaving it to browser font-matching. Consequence: labels render Regular, so the type
+hierarchy is flatter than designed. **The fix is not code** — ask whoever manages
+lokalmat.no for the Messina Sans Book/Medium and SemiBold webfont files (the retail
+family includes them; they simply were not deployed), add two `@font-face` rules, and
+delete the two weight overrides.
 
 Serif is used in exactly **three** places (greeting h1, search page title, producer name
 on ProducerCard) and nowhere else. Do not widen it.

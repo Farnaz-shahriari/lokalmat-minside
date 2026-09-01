@@ -1,91 +1,136 @@
 /* =============================================================================
-   FONTS — READ THIS BEFORE CHANGING ANYTHING HERE
+   FONTS — Messina Sans + Messina Serif (the real brand faces)
    =============================================================================
 
-   WHAT THE DESIGN CALLS FOR
-   -------------------------
-   LokalMat's real typefaces are MESSINA SERIF and MESSINA SANS, both by
-   Luzi Type. Confirmed in references/typography.md in the design system, and
-   assumed throughout the "Min side" design handoff.
+   WHAT THESE ARE AND WHERE THEY CAME FROM
+   ---------------------------------------
+   Messina Sans and Messina Serif are LokalMat's brand typefaces, designed by
+   Luzi Type. They are COMMERCIAL, LICENSED faces — there is no free or open
+   version of them, and font sites offering them as free downloads are
+   redistributing them without the foundry's permission. Do not source them
+   that way.
 
-   The handoff splits them deliberately:
-     - Messina SERIF is used in exactly THREE places and nowhere else:
-         1. the greeting h1 on Min side  ("God morgen, Ola")
-         2. the search page title        ("Søk i hele Norge")
-         3. the producer name on ProducerCard
-     - Messina SANS is used for absolutely everything else.
-   "Do not widen serif usage." — design handoff, Token normalization.
+   The files in ./fonts/ are the organisation's OWN licensed webfont builds,
+   taken from the live lokalmat.no bundle
+   (lokalmat.no/_next/static/media/MessinaSansWeb-*, MessinaSerifWeb-*).
+   The "Web" infix in the filenames is how Luzi Type names webfont-licensed
+   builds, and the internal name tables read "MessinaSansWeb" /
+   "MessinaSerifWeb". Min side is part of lokalmat.no, so it is covered by the
+   same deployment.
 
-   WHAT WE ACTUALLY HAVE — THE PROBLEM
-   -----------------------------------
-   Both Messina fonts are COMMERCIALLY LICENSED and are NOT present in any
-   repository: not in norskmat-design-system, not in the KSL Foretak app, not
-   in this project. This is logged as known gap #9 in the design system's
-   references/colors.md. It cannot be fixed from code — it needs someone to
-   buy a webfont licence from Luzi Type and add the files.
+   ⚠ ONE THING TO CONFIRM WITH WHOEVER HOLDS THE LICENCE
+   Webfont licences are normally scoped by domain and by monthly pageviews.
+   This app is on lokalmat.no, so it is very likely already inside scope — but
+   that needs confirming with the site owner, and if Min side lifts traffic
+   significantly the pageview tier may need raising. That is an organisational
+   question, not a code one.
 
-   WHAT WE DID INSTEAD — THE STAND-INS
-   -----------------------------------
-   Rather than let every heading silently collapse into a generic system font,
-   we substituted the two closest freely-licensed equivalents from Google Fonts:
+   ---------------------------------------------------------------------------
+   AVAILABLE WEIGHTS — AND THE ONE THAT IS MISSING
+   ---------------------------------------------------------------------------
+     Messina Sans   Regular 400   ·   Bold 700
+     Messina Serif  Regular 400   ·   SemiBold 600   ·   Bold 700
 
-     Messina Serif  ->  SOURCE SERIF 4   (similar contemporary transitional
-                                          serif, comparable contrast and
-                                          x-height, holds up at display sizes)
-     Messina Sans   ->  INTER            (neo-grotesque with humanist
-                                          detailing, closest widely-available
-                                          match to Messina Sans' texture)
+   🟡 MESSINA SANS HAS NO MEDIUM (500), and the design system's type scale uses
+   500 throughout — label-medium, label-large, title-medium and title-large all
+   read --font-weight-medium.
 
-   These are STAND-INS, not the brand fonts. Anything typeset here is
-   approximately, not exactly, on-brand. Do not present a screenshot of this
-   app as final brand typography.
+   Left alone, CSS font-matching would quietly send 500 → 400 and 600 → 700.
+   Rather than leave that to the browser, the .theme-lokalmat block below pins
+   those two weights explicitly so the fallback is deliberate and visible:
+
+       --font-weight-medium   500 → 400   (no 500 file exists)
+       --font-weight-semibold 600 → 700   (nearest available)
+
+   CONSEQUENCE: labels render Regular rather than Medium, so the type hierarchy
+   is flatter than the design intends. THE FIX IS NOT CODE — ask whoever manages
+   lokalmat.no for the Messina Sans Book/Medium and SemiBold webfont files. The
+   retail family includes them; they simply were not deployed. Add them as
+   @font-face rules below, then delete the two weight overrides.
+
+   ---------------------------------------------------------------------------
+   SERIF IS RESERVED FOR EXACTLY THREE PLACES
+   ---------------------------------------------------------------------------
+     1. the greeting h1 on Min side  ("God morgen, Ola")
+     2. the search page title        ("Søk i hele Norge")
+     3. the producer name on ProducerCard
+   Everything else is Messina Sans. "Do not widen serif usage." — design handoff.
+   The only route to serif is the .font-brand-serif class at the bottom.
 
    NOTE ON tokens.css
    ------------------
-   The design system's .theme-lokalmat block sets a single --font-family:
-       'Messina Serif', 'Sands', Georgia, serif
-   That is a serif-only stack, which cannot express the serif/sans split the
-   design needs — every named type class (.body-large, .label-medium, and so
-   on) reads --font-family, so with that value alone ALL body text would render
-   as a serif. We therefore point --font-family at the SANS stack below (which
-   is correct: sans is the default for everything) and expose the serif through
-   an explicit .font-brand-serif utility used only in the three places listed
-   above.
-
-   We deliberately did NOT edit the design system's tokens.css to do this — it
-   is copied into src/styles/tokens.css verbatim and should stay that way.
-   The override lives here so the two files never silently diverge.
-
-   ---------------------------------------------------------------------------
-   TO SWAP IN THE REAL FONTS LATER — the whole change is in this file:
-     1. Buy the Messina Serif + Messina Sans webfont licence from Luzi Type.
-     2. Drop the .woff2 files into public/fonts/.
-     3. Add @font-face rules for them below.
-     4. Put 'Messina Sans' at the front of --font-lokalmat-sans, and
-        'Messina Serif' at the front of --font-lokalmat-serif.
-     5. Remove the Google Fonts <link> for Inter + Source Serif 4 in index.html.
-     6. Update the design system's .theme-lokalmat --font-family and delete
-        known gap #9 from references/colors.md, then log it in docs/journal.md.
-   Nothing else in this codebase references a font by name.
-   ---------------------------------------------------------------------------
+   The design system's .theme-lokalmat sets a single serif-only --font-family,
+   which cannot express the serif/sans split this design needs — every named
+   type class reads --font-family, so all body text would come out serif. We
+   point --font-family at the SANS stack here (correct: sans is the default for
+   everything) and expose serif through .font-brand-serif. tokens.css itself is
+   copied verbatim and is deliberately NOT edited.
    ========================================================================== */
 
+/* --- Messina Sans ------------------------------------------------------- */
+@font-face {
+  font-family: "Messina Sans";
+  src: url("./fonts/MessinaSansWeb-Regular.woff2") format("woff2"),
+       url("./fonts/MessinaSansWeb-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Messina Sans";
+  src: url("./fonts/MessinaSansWeb-Bold.woff2") format("woff2"),
+       url("./fonts/MessinaSansWeb-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Messina Serif ------------------------------------------------------ */
+@font-face {
+  font-family: "Messina Serif";
+  src: url("./fonts/MessinaSerifWeb-Regular.woff2") format("woff2"),
+       url("./fonts/MessinaSerifWeb-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Messina Serif";
+  src: url("./fonts/MessinaSerifWeb-SemiBold.woff2") format("woff2"),
+       url("./fonts/MessinaSerifWeb-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Messina Serif";
+  src: url("./fonts/MessinaSerifWeb-Bold.woff2") format("woff2"),
+       url("./fonts/MessinaSerifWeb-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* STAND-IN for Messina Sans — replace 'Inter' when the real file lands. */
-  --font-lokalmat-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-  /* STAND-IN for Messina Serif — replace 'Source Serif 4' likewise. */
-  --font-lokalmat-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  /* Fallbacks are close metric matches, used only while the webfont loads or
+     if it fails outright. They are NOT brand-approved substitutes. */
+  --font-lokalmat-sans: "Messina Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-lokalmat-serif: "Messina Serif", Georgia, "Times New Roman", serif;
 }
 
-/* Point the design system's own --font-family at the SANS stack.
-   See "NOTE ON tokens.css" above for why this override exists. */
 .theme-lokalmat {
+  /* Sans is the default for everything — see "NOTE ON tokens.css" above. */
   --font-family: var(--font-lokalmat-sans);
+
+  /* Deliberate weight fallbacks, because Messina Sans ships no 500 here.
+     Delete these two lines the moment the Book/Medium and SemiBold files land.
+     See "AVAILABLE WEIGHTS" above. */
+  --font-weight-medium: 400;
+  --font-weight-semibold: 700;
 }
 
-/* The ONLY way serif enters this app. Three usages, all listed at the top of
-   this file. If you are about to add a fourth, re-read the handoff first. */
+/* The ONLY route to serif. Three usages, listed at the top of this file.
+   If you are about to add a fourth, re-read the handoff first. */
 .font-brand-serif {
   font-family: var(--font-lokalmat-serif);
   font-weight: 400;
