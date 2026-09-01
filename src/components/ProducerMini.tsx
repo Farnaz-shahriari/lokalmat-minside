@@ -41,7 +41,7 @@ export function ProducerMini({
 
   return (
     <div
-      className="flex items-center w-full bg-surface border border-outline-variant"
+      className="lm-producer-mini flex items-center w-full bg-surface border border-outline-variant"
       style={{
         borderRadius: "var(--radius-card)",
         gap: "var(--space-sm)",

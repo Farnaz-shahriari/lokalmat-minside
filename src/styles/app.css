@@ -76,6 +76,32 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
+   ProducerMini — promote the producer name to the row's primary label
+
+   The design handoff specifies this name at 16/600. ListItem's compact density
+   styles its title slot as label-large (14/500), which is the SAME size and
+   weight as the org.nr / categories line directly beneath it — so the name did
+   not read as the label of the row at all.
+
+   Promoted here to body-large (16px) plus the semibold weight token. Both are
+   design system values; nothing raw. Scoped to .lm-producer-mini so no other
+   ListItem in the app is affected.
+
+   Note on weight: --font-weight-semibold resolves to 700 for LokalMat because
+   Messina Sans ships no 600 in the deployed set (see fonts.css). Once the real
+   SemiBold lands this becomes 600 automatically, with no change here.
+
+   FLAG FOR UPSTREAM: ListItem has no prop for emphasising its title, which is
+   why this needs a structural selector. A `titleStyle` or `emphasis` prop would
+   remove the need for it.
+   -------------------------------------------------------------------------- */
+.lm-producer-mini > button > div > p:nth-child(2) {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+}
+
+/* -----------------------------------------------------------------------------
    Gap fill: .headline-small (24px)
    references/typography.md lists 24px as a REAL size in use ("close to text-xl,
    24px, 7 usages") and tokens.css defines --text-xl: 24px — but there is no
