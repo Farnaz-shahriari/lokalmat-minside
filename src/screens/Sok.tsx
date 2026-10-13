@@ -35,7 +35,10 @@ import { Icon } from "../components/Icon";
 import { CATEGORIES, FILTER_DEFS } from "../data/lokalmat-data";
 import type { EnrichedProducer } from "../lib/enrich";
 import { UNLIMITED_RADIUS, matchProducer, matchProduct } from "../lib/search";
+import { exportSearchToExcel } from "../lib/exportSearch";
+import { countNoun } from "../lib/format";
 import { useApp, type FilterKey } from "../state/AppState";
+import { useSnackbar } from "../components/Snackbar";
 
 /** The six checkbox filter groups, in the order the design specifies. */
 const FILTER_GROUPS: { title: string; key: FilterKey; options: string[] }[] = [
@@ -66,6 +69,8 @@ export function Sok() {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saveName, setSaveName] = useState("");
+  const [exporting, setExporting] = useState(false);
+  const { showSnackbar } = useSnackbar();
 
   /* ---- producer-level predicate, shared by both scopes ------------------- */
   const producerOk = useMemo(() => {
@@ -137,6 +142,32 @@ export function Sok() {
 
   const title = activeSavedSearch ? activeSavedSearch.name : "Søk i hele Norge";
 
+  /* Export exports BOTH scopes, not just the visible tab — the header already
+     reports both counts, so losing one in the file would surprise the user.
+     Confirmation reuses the snackbar, the same way follow and save do. */
+  const totalHits = productResults.length + producerResults.length;
+
+  async function handleExport() {
+    if (!totalHits || exporting) return;
+    setExporting(true);
+    try {
+      await exportSearchToExcel({
+        products: productResults,
+        producers: producerResults,
+        search,
+        savedSearchName: activeSavedSearch ? activeSavedSearch.name : null,
+      });
+      showSnackbar(
+        `Eksporterte ${countNoun(productResults.length, "produkt", "produkter")} og ` +
+          `${countNoun(producerResults.length, "produsent", "produsenter")} til Excel.`,
+      );
+    } catch {
+      showSnackbar("Kunne ikke eksportere søket. Prøv igjen.");
+    } finally {
+      setExporting(false);
+    }
+  }
+
   return (
     <div>
       {/* ================= Page header, spans BOTH panes ================= */}
@@ -197,6 +228,19 @@ export function Sok() {
             >
               <Icon name="bookmark_add" size={18} />
               {activeSavedSearch ? "Lagre som nytt" : "Lagre søk"}
+            </Button>
+
+            {/* Disabled only when BOTH scopes are empty — an export with
+                producers but no products is still worth having. */}
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleExport}
+              disabled={!totalHits || exporting}
+              aria-label={`Eksporter ${countNoun(productResults.length, "produkt", "produkter")} og ${countNoun(producerResults.length, "produsent", "produsenter")} til Excel`}
+            >
+              <Icon name="download" size={18} />
+              {exporting ? "Eksporterer …" : "Eksporter til Excel"}
             </Button>
 
             {activeSavedSearch && (

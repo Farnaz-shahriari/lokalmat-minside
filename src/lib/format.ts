@@ -24,3 +24,8 @@ export function unfollowedCountText(n: number): string {
 export function compareNb(a: string, b: string): number {
   return a.localeCompare(b, "nb");
 }
+
+/** "1 produsent" / "7 produsenter" — Norwegian needs the singular. */
+export function countNoun(n: number, singular: string, plural: string): string {
+  return `${n} ${n === 1 ? singular : plural}`;
+}
