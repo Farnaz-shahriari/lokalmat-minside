@@ -343,3 +343,51 @@ body {
     transition: none;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   SCROLLING COLUMN  (see src/components/ScrollColumn.tsx)
+
+   The producer list beside the map scrolls inside a capped height. macOS hides
+   overlay scrollbars until you actually scroll, which removes the only hint
+   that there is more below, so this scrollbar is always drawn. Styled to the
+   token palette rather than left at the browser default.
+   -------------------------------------------------------------------------- */
+.lm-scroll-list {
+  overflow-y: auto;
+  /* Reserve the gutter so rows do not reflow when the scrollbar appears. */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline-variant) transparent;
+}
+
+.lm-scroll-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.lm-scroll-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lm-scroll-list::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 999px;
+  /* Inset the thumb off the edge without needing a separate track colour. */
+  border: 3px solid var(--surface);
+}
+
+.lm-scroll-list:hover::-webkit-scrollbar-thumb {
+  background: var(--outline);
+}
+
+/* Fades the last row out against the page so the cut edge reads as "more
+   below" rather than as a row that happens to be clipped. Removed on reaching
+   the end, so the bottom of the list is not permanently dimmed. */
+.lm-scroll-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56px;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--surface) 10%, transparent);
+}

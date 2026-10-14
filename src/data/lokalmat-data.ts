@@ -333,7 +333,486 @@ const RAW_PRODUCERS: RawProducer[] = [
       "Kjøtt"
     ],
     "productCount": 1
-  }
+  },
+
+  /* ---------------------------------------------------------------------------
+     ⚠ INVENTED SAMPLE PRODUCERS — everything above this line is real data
+     scraped from lokalmat.no; everything below it is not.
+
+     These exist so the "Produsenter i ditt område" list is long enough to
+     actually scroll, and so the radius slider has something to reveal when you
+     drag it past 160 km. The businesses, the blurbs and the product names are
+     made up. Towns and coordinates are real places, because the map has to put
+     the pins somewhere sensible.
+
+     None of these carry a lokalmat.no `url`, deliberately — a link to a product
+     page that does not exist is worse than no link.
+
+     Swap the whole block for the real producer feed before this goes anywhere
+     near a user.
+     ------------------------------------------------------------------------ */
+  {
+   "id": "prod-vollebekk-mikromeieri",
+   "name": "Vollebekk mikromeieri",
+   "town": "Ski",
+   "county": "Akershus",
+   "region": "Ski, Akershus",
+   "lat": 59.719,
+   "lng": 10.836,
+   "blurb": "Lite meieri som syrner og pakker alt for hånd, med mjølk fra fire gårder på Follo.",
+   "categories": [
+    "Meieriprodukter"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-drobak-rokeri",
+   "name": "Drøbak røkeri",
+   "town": "Drøbak",
+   "county": "Akershus",
+   "region": "Drøbak, Akershus",
+   "lat": 59.663,
+   "lng": 10.63,
+   "blurb": "Røyker laks og makrell over orespon i et gammelt sildesalteri ved Oslofjorden.",
+   "categories": [
+    "Fisk og sjømat"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-jeloy-gront",
+   "name": "Jeløy grønt",
+   "town": "Moss",
+   "county": "Østfold",
+   "region": "Moss, Østfold",
+   "lat": 59.434,
+   "lng": 10.659,
+   "blurb": "Friland og veksthus på Jeløy, med levering til butikk samme morgen som høsting.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-glommen-kornmolle",
+   "name": "Glommen kornmølle",
+   "town": "Fredrikstad",
+   "county": "Østfold",
+   "region": "Fredrikstad, Østfold",
+   "lat": 59.221,
+   "lng": 10.934,
+   "blurb": "Steinmaler økologisk korn fra Østfold og selger mel og ferdige bakeblandinger.",
+   "categories": [
+    "Korn- og Bakevarer"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-sarpsborg-saftpresseri",
+   "name": "Sarpsborg saftpresseri",
+   "town": "Sarpsborg",
+   "county": "Østfold",
+   "region": "Sarpsborg, Østfold",
+   "lat": 59.283,
+   "lng": 11.11,
+   "blurb": "Presser saft og koker syltetøy på bær fra egne åkrer langs Glomma.",
+   "categories": [
+    "Saft, syltetøy, geleer"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-iddefjord-osteri",
+   "name": "Iddefjord osteri",
+   "town": "Halden",
+   "county": "Østfold",
+   "region": "Halden, Østfold",
+   "lat": 59.125,
+   "lng": 11.388,
+   "blurb": "Modner kittoster i fjellhall ved Iddefjorden, med mjølk fra egne kyr.",
+   "categories": [
+    "Oster"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-mjosa-andegard",
+   "name": "Mjøsa andegård",
+   "town": "Hamar",
+   "county": "Innlandet",
+   "region": "Hamar, Innlandet",
+   "lat": 60.795,
+   "lng": 11.068,
+   "blurb": "Frilandsand ved Mjøsa, slaktet og foredlet på gården.",
+   "categories": [
+    "Fjærkre"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-toten-potetpakkeri",
+   "name": "Toten potetpakkeri",
+   "town": "Gjøvik",
+   "county": "Innlandet",
+   "region": "Gjøvik, Innlandet",
+   "lat": 60.795,
+   "lng": 10.692,
+   "blurb": "Pakker mandelpotet og tidligpotet fra Totenbygdene rett fra åkeren.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-ringerike-bakeri",
+   "name": "Ringerike bakeri",
+   "town": "Hønefoss",
+   "county": "Buskerud",
+   "region": "Hønefoss, Buskerud",
+   "lat": 60.169,
+   "lng": 10.256,
+   "blurb": "Surdeigsbakeri som maler eget mel på korn fra Ringerike.",
+   "categories": [
+    "Korn- og Bakevarer"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-drammenselva-bryggeri",
+   "name": "Drammenselva bryggeri",
+   "town": "Drammen",
+   "county": "Buskerud",
+   "region": "Drammen, Buskerud",
+   "lat": 59.744,
+   "lng": 10.204,
+   "blurb": "Småskalabryggeri i et gammelt papirlager, med øl på norsk bygg og humle.",
+   "categories": [
+    "Alkoholholdige drikker"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-kongsberg-viltslakteri",
+   "name": "Kongsberg viltslakteri",
+   "town": "Kongsberg",
+   "county": "Buskerud",
+   "region": "Kongsberg, Buskerud",
+   "lat": 59.669,
+   "lng": 9.65,
+   "blurb": "Tar imot og foredler elg, hjort og rådyr fra jaktlag i Numedal.",
+   "categories": [
+    "Kjøtt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-eiker-eplepresseri",
+   "name": "Eiker eplepresseri",
+   "town": "Hokksund",
+   "county": "Buskerud",
+   "region": "Hokksund, Buskerud",
+   "lat": 59.775,
+   "lng": 9.908,
+   "blurb": "Presser eplemost på frukt fra hager og småbruk i Eikerbygdene.",
+   "categories": [
+    "Drikkevarer"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-faerder-sjomat",
+   "name": "Færder sjømat",
+   "town": "Tønsberg",
+   "county": "Vestfold",
+   "region": "Tønsberg, Vestfold",
+   "lat": 59.267,
+   "lng": 10.408,
+   "blurb": "Leverer skalldyr og fisk fra Færder, landet og pakket samme døgn.",
+   "categories": [
+    "Fisk og sjømat"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-sandefjord-syltelager",
+   "name": "Sandefjord syltelager",
+   "town": "Sandefjord",
+   "county": "Vestfold",
+   "region": "Sandefjord, Vestfold",
+   "lat": 59.131,
+   "lng": 10.224,
+   "blurb": "Småskala produksjon av syltetøy og gelé på vestfoldbær.",
+   "categories": [
+    "Saft, syltetøy, geleer"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-larvik-lammekjott",
+   "name": "Larvik lammekjøtt",
+   "town": "Larvik",
+   "county": "Vestfold",
+   "region": "Larvik, Vestfold",
+   "lat": 59.054,
+   "lng": 10.028,
+   "blurb": "Utegangerlam på kystlynghei i Larvik, slaktet lokalt.",
+   "categories": [
+    "Kjøtt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-horten-hagebruk",
+   "name": "Horten hagebruk",
+   "town": "Horten",
+   "county": "Vestfold",
+   "region": "Horten, Vestfold",
+   "lat": 59.417,
+   "lng": 10.483,
+   "blurb": "Veksthus og friland med tomat, agurk og urter hele året.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-telemark-tradisjonsmat",
+   "name": "Telemark tradisjonsmat",
+   "town": "Skien",
+   "county": "Telemark",
+   "region": "Skien, Telemark",
+   "lat": 59.209,
+   "lng": 9.609,
+   "blurb": "Lager rakfisk, rømmegrøt og annen tradisjonskost etter gamle oppskrifter.",
+   "categories": [
+    "Ferdigmat"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-notodden-geitosteri",
+   "name": "Notodden geitosteri",
+   "town": "Notodden",
+   "county": "Telemark",
+   "region": "Notodden, Telemark",
+   "lat": 59.559,
+   "lng": 9.258,
+   "blurb": "Geiteost fra egen besetning på Lifjell, modnet i kjeller.",
+   "categories": [
+    "Oster"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-bo-fruktgard",
+   "name": "Bø fruktgård",
+   "town": "Bø",
+   "county": "Telemark",
+   "region": "Bø, Telemark",
+   "lat": 59.412,
+   "lng": 9.063,
+   "blurb": "Epler, plommer og moreller i Midt-Telemark, med egen gårdsbutikk.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-eidsvoll-honningbruk",
+   "name": "Eidsvoll honningbruk",
+   "town": "Eidsvoll",
+   "county": "Akershus",
+   "region": "Eidsvoll, Akershus",
+   "lat": 60.329,
+   "lng": 11.263,
+   "blurb": "Birøkt med stader langs Vorma, med sortshonning fra lyng og kløver.",
+   "categories": [
+    "Annet"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-romerike-rotfrukt",
+   "name": "Romerike rotfrukt",
+   "town": "Årnes",
+   "county": "Akershus",
+   "region": "Årnes, Akershus",
+   "lat": 60.123,
+   "lng": 11.471,
+   "blurb": "Gulrot, kålrot og pastinakk fra romerikssand, lagret gjennom vinteren.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-kongsvinger-kjottskjaereri",
+   "name": "Kongsvinger kjøttskjæreri",
+   "town": "Kongsvinger",
+   "county": "Innlandet",
+   "region": "Kongsvinger, Innlandet",
+   "lat": 60.19,
+   "lng": 11.996,
+   "blurb": "Skjærer og foredler storfe fra gårder i Solør og Odal.",
+   "categories": [
+    "Kjøtt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-hadeland-urtegard",
+   "name": "Hadeland urtegård",
+   "town": "Gran",
+   "county": "Innlandet",
+   "region": "Gran, Innlandet",
+   "lat": 60.393,
+   "lng": 10.56,
+   "blurb": "Dyrker og tørker urter og spiselige blomster for restaurant og butikk.",
+   "categories": [
+    "Annet"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-indre-ostfold-eggpakkeri",
+   "name": "Indre Østfold eggpakkeri",
+   "town": "Mysen",
+   "county": "Østfold",
+   "region": "Mysen, Østfold",
+   "lat": 59.553,
+   "lng": 11.33,
+   "blurb": "Frittgående høner i små flokker, egg pakket samme dag.",
+   "categories": [
+    "Fjærkre"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-nesodden-tangbruk",
+   "name": "Nesodden tangbruk",
+   "town": "Nesodden",
+   "county": "Akershus",
+   "region": "Nesodden, Akershus",
+   "lat": 59.846,
+   "lng": 10.657,
+   "blurb": "Høster sukkertare og butare i Oslofjorden og tørker den på land.",
+   "categories": [
+    "Annet"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-asker-mikrobryggeri",
+   "name": "Asker mikrobryggeri",
+   "town": "Asker",
+   "county": "Akershus",
+   "region": "Asker, Akershus",
+   "lat": 59.834,
+   "lng": 10.435,
+   "blurb": "Brygger i liten skala på norsk malt, med tapperi i gamle Asker meieri.",
+   "categories": [
+    "Alkoholholdige drikker"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-lier-veksthus",
+   "name": "Lier veksthus",
+   "town": "Lier",
+   "county": "Buskerud",
+   "region": "Lier, Buskerud",
+   "lat": 59.79,
+   "lng": 10.237,
+   "blurb": "Tomat, agurk og paprika i veksthus i Lierdalen, levert året rundt.",
+   "categories": [
+    "Frukt og grønt"
+   ],
+   "productCount": 2
+  },
+  {
+   "id": "prod-elverum-elgprodukter",
+   "name": "Elverum elgprodukter",
+   "town": "Elverum",
+   "county": "Innlandet",
+   "region": "Elverum, Innlandet",
+   "lat": 60.881,
+   "lng": 11.562,
+   "blurb": "Foredler elg fra Østerdalen til pølse, spekemat og ferdigretter.",
+   "categories": [
+    "Kjøtt"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-lofthus-siderhus",
+   "name": "Lofthus siderhus",
+   "town": "Lofthus",
+   "county": "Vestland",
+   "region": "Lofthus, Vestland",
+   "lat": 60.326,
+   "lng": 6.661,
+   "blurb": "Sider på eple fra egne hager i Hardanger, gjæret i ståltank.",
+   "categories": [
+    "Alkoholholdige drikker"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-jaeren-melkebruk",
+   "name": "Jæren melkebruk",
+   "town": "Bryne",
+   "county": "Rogaland",
+   "region": "Bryne, Rogaland",
+   "lat": 58.735,
+   "lng": 5.646,
+   "blurb": "Gårdsmeieri på Jæren med upasteurisert mjølk og fersk ost.",
+   "categories": [
+    "Meieriprodukter"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-lofoten-torrfisk",
+   "name": "Lofoten tørrfisk",
+   "town": "Svolvær",
+   "county": "Nordland",
+   "region": "Svolvær, Nordland",
+   "lat": 68.234,
+   "lng": 14.567,
+   "blurb": "Henger skrei på hjell i Lofoten etter metoder som har stått seg i hundrevis av år.",
+   "categories": [
+    "Fisk og sjømat"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-setesdal-spekemat",
+   "name": "Setesdal spekemat",
+   "town": "Valle",
+   "county": "Agder",
+   "region": "Valle, Agder",
+   "lat": 59.207,
+   "lng": 7.533,
+   "blurb": "Speker fenalår og pinnekjøtt i fjellklima i Setesdal.",
+   "categories": [
+    "Kjøtt"
+   ],
+   "productCount": 1
+  },
+  {
+   "id": "prod-voss-gardsbakeri",
+   "name": "Voss gardsbakeri",
+   "town": "Voss",
+   "county": "Vestland",
+   "region": "Voss, Vestland",
+   "lat": 60.63,
+   "lng": 6.419,
+   "blurb": "Bakeri på gård som maler eget korn og baker i vedfyrt steinovn.",
+   "categories": [
+    "Korn- og Bakevarer"
+   ],
+   "productCount": 1
+  },
 ];
 type RawProduct = Omit<Product, "sesong">;
 
@@ -978,7 +1457,587 @@ const RAW_PRODUCTS: RawProduct[] = [
   "approval": "godkjent",
   "fresh": null,
   "inSeason": false
- }
+ },
+
+ /* ⚠ INVENTED SAMPLE PRODUCTS, one or two for each invented producer above, so
+    that a producer claiming "2 produkter" actually has two when you click into
+    it. No `url` field: these pages do not exist. See the note in RAW_PRODUCERS. */
+ {
+  "id": 51,
+  "name": "Vollebekk kulturmelk",
+  "producer": "Vollebekk mikromeieri",
+  "producerId": "prod-vollebekk-mikromeieri",
+  "category": "Meieriprodukter",
+  "subcategory": "Melk",
+  "description": "Langsomt syrnet kulturmelk fra Follo, uten tilsatte stabilisatorer.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 52,
+  "name": "Vollebekk seterrømme",
+  "producer": "Vollebekk mikromeieri",
+  "producerId": "prod-vollebekk-mikromeieri",
+  "category": "Meieriprodukter",
+  "subcategory": "Rømme",
+  "description": "Tykk seterrømme på 35 prosent, modnet i fire døgn.",
+  "approval": "til-behandling",
+  "fresh": "nyhet",
+  "inSeason": false
+ },
+ {
+  "id": 53,
+  "name": "Drøbak kaldrøkt laks 200g",
+  "producer": "Drøbak røkeri",
+  "producerId": "prod-drobak-rokeri",
+  "category": "Fisk og sjømat",
+  "subcategory": "Røkt fisk",
+  "description": "Kaldrøkt over orespon i tolv timer, skåret for hånd.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 54,
+  "name": "Drøbak røkt makrell",
+  "producer": "Drøbak røkeri",
+  "producerId": "prod-drobak-rokeri",
+  "category": "Fisk og sjømat",
+  "subcategory": "Røkt fisk",
+  "description": "Varmrøkt makrell fisket i Oslofjorden gjennom sommeren.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 55,
+  "name": "Jeløy knollselleri",
+  "producer": "Jeløy grønt",
+  "producerId": "prod-jeloy-gront",
+  "category": "Frukt og grønt",
+  "subcategory": "Grønnsaker",
+  "description": "Frilandsdyrket knollselleri, lagret i jordkjeller.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 56,
+  "name": "Jeløy sommersalat",
+  "producer": "Jeløy grønt",
+  "producerId": "prod-jeloy-gront",
+  "category": "Frukt og grønt",
+  "subcategory": "Salat",
+  "description": "Plukkesalat høstet samme morgen den kjøres ut.",
+  "approval": "none",
+  "fresh": "nyhet",
+  "inSeason": true
+ },
+ {
+  "id": 57,
+  "name": "Glommen siktet hvetemel 2kg",
+  "producer": "Glommen kornmølle",
+  "producerId": "prod-glommen-kornmolle",
+  "category": "Korn- og Bakevarer",
+  "subcategory": "Mel",
+  "description": "Steinmalt hvetemel fra østfoldkorn, siktet to ganger.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 58,
+  "name": "Glommen grovbrødblanding",
+  "producer": "Glommen kornmølle",
+  "producerId": "prod-glommen-kornmolle",
+  "category": "Korn- og Bakevarer",
+  "subcategory": "Bakemiks",
+  "description": "Ferdig blanding til grovbrød med rug og havre.",
+  "approval": "godkjent",
+  "fresh": "oppdatert",
+  "inSeason": false
+ },
+ {
+  "id": 59,
+  "name": "Sarpsborg solbærsaft 0,5l",
+  "producer": "Sarpsborg saftpresseri",
+  "producerId": "prod-sarpsborg-saftpresseri",
+  "category": "Saft, syltetøy, geleer",
+  "subcategory": "Saft",
+  "description": "Presset på solbær fra egne åkrer, uten tilsatt sukker.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 60,
+  "name": "Sarpsborg bringebærsyltetøy",
+  "producer": "Sarpsborg saftpresseri",
+  "producerId": "prod-sarpsborg-saftpresseri",
+  "category": "Saft, syltetøy, geleer",
+  "subcategory": "Syltetøy",
+  "description": "Kokt på bringebær plukket i juli.",
+  "approval": "til-behandling",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 61,
+  "name": "Iddefjord kittost",
+  "producer": "Iddefjord osteri",
+  "producerId": "prod-iddefjord-osteri",
+  "category": "Oster",
+  "subcategory": "Modnet ost",
+  "description": "Modnet tolv uker i fjellhall, vasket med saltlake.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 62,
+  "name": "Mjøsa andebryst",
+  "producer": "Mjøsa andegård",
+  "producerId": "prod-mjosa-andegard",
+  "category": "Fjærkre",
+  "subcategory": "Fjærkre",
+  "description": "Frilandsand oppdrettet ved Mjøsa, modnet fire døgn.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 63,
+  "name": "Mjøsa andeconfit",
+  "producer": "Mjøsa andegård",
+  "producerId": "prod-mjosa-andegard",
+  "category": "Fjærkre",
+  "subcategory": "Ferdigmat",
+  "description": "Andelår confitert i eget fett.",
+  "approval": "none",
+  "fresh": "nyhet",
+  "inSeason": false
+ },
+ {
+  "id": 64,
+  "name": "Toten mandelpotet 1kg",
+  "producer": "Toten potetpakkeri",
+  "producerId": "prod-toten-potetpakkeri",
+  "category": "Frukt og grønt",
+  "subcategory": "Potet",
+  "description": "Mandelpotet dyrket i totensand, sortert for hånd.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 65,
+  "name": "Ringerike surdeigsbrød",
+  "producer": "Ringerike bakeri",
+  "producerId": "prod-ringerike-bakeri",
+  "category": "Korn- og Bakevarer",
+  "subcategory": "Brød",
+  "description": "Hevet i atten timer på egen surdeigskultur.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 66,
+  "name": "Ringerike byggkakene",
+  "producer": "Ringerike bakeri",
+  "producerId": "prod-ringerike-bakeri",
+  "category": "Korn- og Bakevarer",
+  "subcategory": "Flatbrød",
+  "description": "Tynne byggkaker stekt på takke.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 67,
+  "name": "Drammenselva lys lager 0,33l",
+  "producer": "Drammenselva bryggeri",
+  "producerId": "prod-drammenselva-bryggeri",
+  "category": "Alkoholholdige drikker",
+  "subcategory": "Øl",
+  "description": "Lagret i seks uker på norsk bygg.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 68,
+  "name": "Drammenselva juleøl",
+  "producer": "Drammenselva bryggeri",
+  "producerId": "prod-drammenselva-bryggeri",
+  "category": "Alkoholholdige drikker",
+  "subcategory": "Øl",
+  "description": "Mørkt juleøl brygget på malt fra Ringerike.",
+  "approval": "none",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 69,
+  "name": "Kongsberg elgkarbonadedeig",
+  "producer": "Kongsberg viltslakteri",
+  "producerId": "prod-kongsberg-viltslakteri",
+  "category": "Kjøtt",
+  "subcategory": "Vilt",
+  "description": "Kvernet elgkjøtt fra jaktlag i Numedal.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 70,
+  "name": "Kongsberg hjortefilet",
+  "producer": "Kongsberg viltslakteri",
+  "producerId": "prod-kongsberg-viltslakteri",
+  "category": "Kjøtt",
+  "subcategory": "Vilt",
+  "description": "Mørnet hjortefilet, vakuumpakket.",
+  "approval": "til-behandling",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 71,
+  "name": "Eiker eplemost 1l",
+  "producer": "Eiker eplepresseri",
+  "producerId": "prod-eiker-eplepresseri",
+  "category": "Drikkevarer",
+  "subcategory": "Most",
+  "description": "Presset på Aroma og Gravenstein, upasteurisert.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 72,
+  "name": "Færder kokte reker 500g",
+  "producer": "Færder sjømat",
+  "producerId": "prod-faerder-sjomat",
+  "category": "Fisk og sjømat",
+  "subcategory": "Skalldyr",
+  "description": "Kokt om bord rett etter trekking.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 73,
+  "name": "Færder makrellfilet",
+  "producer": "Færder sjømat",
+  "producerId": "prod-faerder-sjomat",
+  "category": "Fisk og sjømat",
+  "subcategory": "Fisk",
+  "description": "Filetert for hånd, pakket samme døgn.",
+  "approval": "godkjent",
+  "fresh": "oppdatert",
+  "inSeason": true
+ },
+ {
+  "id": 74,
+  "name": "Sandefjord rabarbrakompott",
+  "producer": "Sandefjord syltelager",
+  "producerId": "prod-sandefjord-syltelager",
+  "category": "Saft, syltetøy, geleer",
+  "subcategory": "Kompott",
+  "description": "Kokt på rabarbra fra egne bed.",
+  "approval": "none",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 75,
+  "name": "Larvik lammelår",
+  "producer": "Larvik lammekjøtt",
+  "producerId": "prod-larvik-lammekjott",
+  "category": "Kjøtt",
+  "subcategory": "Lam",
+  "description": "Utegangerlam beitet på kystlynghei.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 76,
+  "name": "Larvik fårepølse",
+  "producer": "Larvik lammekjøtt",
+  "producerId": "prod-larvik-lammekjott",
+  "category": "Kjøtt",
+  "subcategory": "Spekemat",
+  "description": "Spekt i tolv uker på gården.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 77,
+  "name": "Horten cherrytomat 250g",
+  "producer": "Horten hagebruk",
+  "producerId": "prod-horten-hagebruk",
+  "category": "Frukt og grønt",
+  "subcategory": "Tomat",
+  "description": "Dyrket i veksthus på Borre, plukket moden.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 78,
+  "name": "Telemark rømmegrøt 500g",
+  "producer": "Telemark tradisjonsmat",
+  "producerId": "prod-telemark-tradisjonsmat",
+  "category": "Ferdigmat",
+  "subcategory": "Ferdigrett",
+  "description": "Kokt på seterrømme, ferdig til oppvarming.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 79,
+  "name": "Notodden brunost geit",
+  "producer": "Notodden geitosteri",
+  "producerId": "prod-notodden-geitosteri",
+  "category": "Oster",
+  "subcategory": "Brunost",
+  "description": "Kokt på geitmysa fra egen besetning.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 80,
+  "name": "Notodden hvit geitost",
+  "producer": "Notodden geitosteri",
+  "producerId": "prod-notodden-geitosteri",
+  "category": "Oster",
+  "subcategory": "Ferskost",
+  "description": "Fersk, mild geitost uten modning.",
+  "approval": "none",
+  "fresh": "nyhet",
+  "inSeason": false
+ },
+ {
+  "id": 81,
+  "name": "Bø morell 500g",
+  "producer": "Bø fruktgård",
+  "producerId": "prod-bo-fruktgard",
+  "category": "Frukt og grønt",
+  "subcategory": "Frukt",
+  "description": "Plukket for hånd i juli.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 82,
+  "name": "Bø plomme Victoria",
+  "producer": "Bø fruktgård",
+  "producerId": "prod-bo-fruktgard",
+  "category": "Frukt og grønt",
+  "subcategory": "Frukt",
+  "description": "Modnet på tre, levert innen et døgn.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 83,
+  "name": "Eidsvoll lynghonning 400g",
+  "producer": "Eidsvoll honningbruk",
+  "producerId": "prod-eidsvoll-honningbruk",
+  "category": "Annet",
+  "subcategory": "Honning",
+  "description": "Sortshonning fra lyngtrekk i august.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 84,
+  "name": "Romerike gulrot 1kg",
+  "producer": "Romerike rotfrukt",
+  "producerId": "prod-romerike-rotfrukt",
+  "category": "Frukt og grønt",
+  "subcategory": "Grønnsaker",
+  "description": "Lagret i jordkjeller gjennom vinteren.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 85,
+  "name": "Kongsvinger høyrygg",
+  "producer": "Kongsvinger kjøttskjæreri",
+  "producerId": "prod-kongsvinger-kjottskjaereri",
+  "category": "Kjøtt",
+  "subcategory": "Storfe",
+  "description": "Mørnet fjorten døgn før skjæring.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 86,
+  "name": "Kongsvinger spekepølse",
+  "producer": "Kongsvinger kjøttskjæreri",
+  "producerId": "prod-kongsvinger-kjottskjaereri",
+  "category": "Kjøtt",
+  "subcategory": "Spekemat",
+  "description": "Spekt i åtte uker uten tilsatt nitritt.",
+  "approval": "til-behandling",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 87,
+  "name": "Hadeland tørket timian",
+  "producer": "Hadeland urtegård",
+  "producerId": "prod-hadeland-urtegard",
+  "category": "Annet",
+  "subcategory": "Urter",
+  "description": "Lufttørket i eget tørkeloft.",
+  "approval": "none",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 88,
+  "name": "Indre Østfold egg 12stk",
+  "producer": "Indre Østfold eggpakkeri",
+  "producerId": "prod-indre-ostfold-eggpakkeri",
+  "category": "Fjærkre",
+  "subcategory": "Egg",
+  "description": "Frittgående høner, egg pakket samme dag.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 89,
+  "name": "Nesodden tørket sukkertare",
+  "producer": "Nesodden tangbruk",
+  "producerId": "prod-nesodden-tangbruk",
+  "category": "Annet",
+  "subcategory": "Tang",
+  "description": "Høstet i Oslofjorden og tørket på land.",
+  "approval": "none",
+  "fresh": "nyhet",
+  "inSeason": false
+ },
+ {
+  "id": 90,
+  "name": "Asker hveteøl 0,5l",
+  "producer": "Asker mikrobryggeri",
+  "producerId": "prod-asker-mikrobryggeri",
+  "category": "Alkoholholdige drikker",
+  "subcategory": "Øl",
+  "description": "Ufiltrert hveteøl brygget på norsk malt.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": true
+ },
+ {
+  "id": 91,
+  "name": "Lier slangeagurk",
+  "producer": "Lier veksthus",
+  "producerId": "prod-lier-veksthus",
+  "category": "Frukt og grønt",
+  "subcategory": "Grønnsaker",
+  "description": "Dyrket i veksthus i Lierdalen.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 92,
+  "name": "Lier paprika rød",
+  "producer": "Lier veksthus",
+  "producerId": "prod-lier-veksthus",
+  "category": "Frukt og grønt",
+  "subcategory": "Grønnsaker",
+  "description": "Høstet moden, levert innen et døgn.",
+  "approval": "godkjent",
+  "fresh": "oppdatert",
+  "inSeason": true
+ },
+ {
+  "id": 93,
+  "name": "Elverum elgpølse",
+  "producer": "Elverum elgprodukter",
+  "producerId": "prod-elverum-elgprodukter",
+  "category": "Kjøtt",
+  "subcategory": "Vilt",
+  "description": "Grovmalt elgpølse uten tilsatt svinekjøtt.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 94,
+  "name": "Lofthus tørr sider 0,75l",
+  "producer": "Lofthus siderhus",
+  "producerId": "prod-lofthus-siderhus",
+  "category": "Alkoholholdige drikker",
+  "subcategory": "Sider",
+  "description": "Gjæret tørr på Gravenstein og Aroma.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 95,
+  "name": "Jæren gardsmjølk 1l",
+  "producer": "Jæren melkebruk",
+  "producerId": "prod-jaeren-melkebruk",
+  "category": "Meieriprodukter",
+  "subcategory": "Melk",
+  "description": "Upasteurisert mjølk fra egen besetning.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 96,
+  "name": "Lofoten tørrfisk loins",
+  "producer": "Lofoten tørrfisk",
+  "producerId": "prod-lofoten-torrfisk",
+  "category": "Fisk og sjømat",
+  "subcategory": "Tørrfisk",
+  "description": "Hengt på hjell fra februar til juni.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 97,
+  "name": "Setesdal fenalår",
+  "producer": "Setesdal spekemat",
+  "producerId": "prod-setesdal-spekemat",
+  "category": "Kjøtt",
+  "subcategory": "Spekemat",
+  "description": "Spekt ni måneder i fjellklima.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
+ {
+  "id": 98,
+  "name": "Voss grovbrød",
+  "producer": "Voss gardsbakeri",
+  "producerId": "prod-voss-gardsbakeri",
+  "category": "Korn- og Bakevarer",
+  "subcategory": "Brød",
+  "description": "Bakt i vedfyrt steinovn på eget malt korn.",
+  "approval": "godkjent",
+  "fresh": null,
+  "inSeason": false
+ },
 ];
 /* Seed saved searches. emailUpdates is applied by AppState on load (false for
    seeded searches, true for newly created ones), so it is omitted here. */
