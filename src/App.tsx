@@ -8,6 +8,7 @@ import { MineProdusenter } from "./screens/MineProdusenter";
 import { MineProdukter } from "./screens/MineProdukter";
 import { LagredeSok } from "./screens/LagredeSok";
 import { Sok } from "./screens/Sok";
+import { Innstillinger } from "./screens/Innstillinger";
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
         <Route path="/produkter" element={<MineProdukter />} />
         <Route path="/lagrede-sok" element={<LagredeSok />} />
         <Route path="/sok" element={<Sok />} />
+        <Route path="/innstillinger" element={<Innstillinger />} />
         <Route path="*" element={<Navigate to="/min-side" replace />} />
       </Route>
     </Routes>

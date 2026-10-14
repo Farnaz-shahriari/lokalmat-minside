@@ -1069,3 +1069,41 @@ export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => {
   else sesong = "Helårs";
   return { ...p, sesong };
 });
+
+/* -----------------------------------------------------------------------------
+   INNKJØPER-INNSTILLINGER
+   The settings the buyer's organisation holds. In production every value here
+   comes from the account/organisation record, not from this file.
+
+   ⚠ SAMPLE VALUES. Deliberately the prototype's own REMA 1000 / Ola Nordmann
+   account rather than a real company — the reference screenshot showed a live
+   test account, and real organisation numbers, addresses and phone numbers do
+   not belong in a prototype that gets shared around.
+   -------------------------------------------------------------------------- */
+
+export interface SettingsField {
+  label: string;
+  value: string;
+}
+
+export const BUYER_SETTINGS: SettingsField[] = [
+  { label: "Innkjøper navn", value: USER.store },
+  { label: "Organisasjonsnummer", value: "912 345 678" },
+  { label: "E-postadresse", value: USER.email },
+  { label: "Adresse", value: "—" },
+  { label: "Innkjøper adresse", value: "Gateveien 12, 0150 Oslo" },
+  { label: "Telefon", value: "22 00 00 00" },
+  { label: "Registrert samarbeidspartner", value: "TINE LOGISTIKK" },
+];
+
+/** The four sections down the left of the settings screen. Only the first is
+    specified in the design so far — see the screen for how the rest are
+    handled. */
+export const SETTINGS_SECTIONS = [
+  { id: "bedrift", label: "Bedriftsinnstillinger" },
+  { id: "endre", label: "Endre innstillinger" },
+  { id: "bruker", label: "Din bruker" },
+  { id: "brukere", label: "Administrer brukere" },
+] as const;
+
+export type SettingsSectionId = (typeof SETTINGS_SECTIONS)[number]["id"];
