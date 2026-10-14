@@ -27,10 +27,13 @@ export function Innstillinger() {
   const [section, setSection] = useState<SettingsSectionId>("bedrift");
 
   return (
-    <div style={{ marginTop: "var(--space-lg)" }}>
-      {/* Pulled 8px left to optically align with the title, same as Søk. */}
-      <div style={{ margin: "0 0 var(--space-xs) -8px" }}>
-        <Button variant="tertiary" size="sm" onClick={() => navigate("/min-side")}>
+    <div>
+      {/* size="default" — the library's standard 56px. size="sm" is for text
+         buttons "in compact contexts"; a page-level back link above the page
+         title is not one. Pulled left by the button's own 24px padding so the
+         arrow sits on the title's left edge. */}
+      <div style={{ margin: "0 0 var(--space-xs) -24px" }}>
+        <Button variant="tertiary" onClick={() => navigate("/min-side")}>
           <Icon name="arrow_back" size={18} />
           Tilbake til Min side
         </Button>

@@ -12,14 +12,23 @@
    Page gutter is space-lg (24px) horizontally and on top; the prototype's 32px
    top padding rounds down to 24px per the handoff's spacing table. */
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { TopBar } from "./TopBar";
 import { NavTabs } from "./NavTabs";
 import { Greeting } from "./Greeting";
 
 export const PAGE_MAX_WIDTH = 1280;
 
+/* Routes that step OUT of the dashboard and so do not repeat its header.
+   Innstillinger is a destination you leave again — its own back link is the
+   way home, and repeating the greeting plus the four tab cards above it both
+   pushes the page title down and offers a route to a page you are already on. */
+const FULL_PAGE_ROUTES = ["/innstillinger"];
+
 export function Layout() {
+  const { pathname } = useLocation();
+  const fullPage = FULL_PAGE_ROUTES.some((r) => pathname.startsWith(r));
+
   return (
     <div className="min-h-screen bg-surface">
       <TopBar />
@@ -32,8 +41,12 @@ export function Layout() {
           paddingBottom: 80,
         }}
       >
-        <Greeting />
-        <NavTabs />
+        {!fullPage && (
+          <>
+            <Greeting />
+            <NavTabs />
+          </>
+        )}
         <Outlet />
       </div>
     </div>
