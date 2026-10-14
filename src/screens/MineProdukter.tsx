@@ -147,10 +147,27 @@ export function MineProdukter() {
         />
       </div>
 
+      {/* Auto-fill grid, NOT flex-wrap with fixed 320px cards. Fixed widths
+          left 240px of dead space on the right of every row at full width —
+          three 320px cards in a 1232px container. ProductCard is documented
+          as "320px wide in scroll rows, fluid in the results grid", and this
+          is a grid, so it should flex.
+
+          280px is chosen so the row lands on FOUR columns at 1232px, which
+          puts each card at 296px — 24px off the designed 320px, close enough
+          that nothing looks stretched. Do not raise it to 300: that drops the
+          row to three columns at 400px each, and a 400x150 media band is the
+          letterboxed look we are avoiding. */}
       {visible.length > 0 ? (
-        <div className="flex flex-wrap" style={{ gap: "var(--space-md)" }}>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "var(--space-md)",
+          }}
+        >
           {visible.map((p) => (
-            <div key={p.id} className="w-[320px] shrink-0">
+            <div key={p.id} className="min-w-0">
               <Lingering variant="fade" leaving={!p.saved && linger.isLeaving(String(p.id))}>
                 <ProductCard
                   product={p}
