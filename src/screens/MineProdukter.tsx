@@ -41,8 +41,8 @@ export function MineProdukter() {
     setProductSearch,
     productFilters,
     toggleProductFilter,
-    onlyApproved,
-    setOnlyApproved,
+    onlyLokalmat,
+    setOnlyLokalmat,
     productSort,
     setProductSort,
   } = useApp();
@@ -56,10 +56,10 @@ export function MineProdukter() {
       products
         .filter((p) => p.saved || linger.isLingering(String(p.id)))
         .filter((p) => matchProduct(p, productSearch))
-        .filter((p) => !onlyApproved || p.isApproved),
+        .filter((p) => !onlyLokalmat || p.lokalmat),
     // linger.version changes when a hold starts or ends.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [products, productSearch, onlyApproved, linger.version, linger.isLingering],
+    [products, productSearch, onlyLokalmat, linger.version, linger.isLingering],
   );
 
   /* Only offer categories that actually have something behind them — a chip
@@ -114,12 +114,12 @@ export function MineProdukter() {
 
         <div className="flex items-center" style={{ gap: "var(--space-sm)" }}>
           <Switch
-            id="only-approved"
-            checked={onlyApproved}
-            onCheckedChange={setOnlyApproved}
+            id="only-lokalmat"
+            checked={onlyLokalmat}
+            onCheckedChange={setOnlyLokalmat}
           />
-          <Label htmlFor="only-approved" className="body-medium text-on-surface cursor-pointer">
-            Vis kun godkjente produkter
+          <Label htmlFor="only-lokalmat" className="body-medium text-on-surface cursor-pointer">
+            Vis kun Lokalmat produkter
           </Label>
         </div>
 

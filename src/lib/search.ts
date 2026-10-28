@@ -71,7 +71,9 @@ export function emptyFilters(): SavedSearchFilters {
     salg: [],
     sesong: [],
     radius: UNLIMITED_RADIUS,
-    approvedOnly: false,
+    // ON by default: the buyer is on lokalmat.no, so Lokalmat products are the
+    // expected set. Switching it OFF widens the results, it does not narrow them.
+    lokalmatOnly: true,
   };
 }
 
@@ -91,7 +93,7 @@ export function normalizeFilters(f: Partial<SavedSearchFilters>): SavedSearchFil
     salg: [...(f.salg || [])].sort(),
     sesong: [...(f.sesong || [])].sort(),
     radius: f.radius ?? e.radius,
-    approvedOnly: !!f.approvedOnly,
+    lokalmatOnly: f.lokalmatOnly ?? e.lokalmatOnly,
   };
 }
 
@@ -105,7 +107,8 @@ export function sameFilters(
 /**
  * The grey summary pills on a saved-search row, and the basis for the active
  * filter chips. Order is fixed: the query in guillemets first, then every
- * selected value in group order, then radius, then approved-only.
+ * selected value in group order, then radius, then the
+ * Lokalmat switch when it is off.
  * Truncated to 6.
  */
 export function summarizeFilters(f: SavedSearchFilters): string[] {
@@ -115,7 +118,9 @@ export function summarizeFilters(f: SavedSearchFilters): string[] {
     (f[k] || []).forEach((v) => out.push(v)),
   );
   if (f.radius && f.radius < UNLIMITED_RADIUS) out.push(`Innen ${f.radius} km`);
-  if (f.approvedOnly) out.push("Kun godkjente");
+  // Lokalmat-only is the default, so the pill marks the DEVIATION: a saved
+  // search that deliberately reaches wider than lokalmat.no.
+  if (!f.lokalmatOnly) out.push("Alle produkter");
   return out.slice(0, 6);
 }
 

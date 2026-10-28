@@ -64,8 +64,8 @@ interface AppStateValue {
   setProductSearch: (v: string) => void;
   productFilters: string[];
   toggleProductFilter: (c: string) => void;
-  onlyApproved: boolean;
-  setOnlyApproved: (v: boolean) => void;
+  onlyLokalmat: boolean;
+  setOnlyLokalmat: (v: boolean) => void;
   productSort: ProductSort;
   setProductSort: (v: ProductSort) => void;
 
@@ -110,7 +110,7 @@ const emptySearchState = (): SearchState => ({
   salg: [],
   sesong: [],
   radius: 900,
-  approvedOnly: false,
+  lokalmatOnly: true,
   scope: "produkter",
   activeSaved: null,
 });
@@ -134,7 +134,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [producerFilters, setProducerFilters] = useState<string[]>([]);
   const [productSearch, setProductSearch] = useState("");
   const [productFilters, setProductFilters] = useState<string[]>([]);
-  const [onlyApproved, setOnlyApproved] = useState(false);
+  // ON by default, same as the Søk sidebar switch.
+  const [onlyLokalmat, setOnlyLokalmat] = useState(true);
   const [productSort, setProductSort] = useState<ProductSort>("recent");
 
   const [mapRadius, setMapRadius] = useState(160);
@@ -252,7 +253,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         salg: [...(f.salg || [])],
         sesong: [...(f.sesong || [])],
         radius: f.radius || 900,
-        approvedOnly: !!f.approvedOnly,
+        lokalmatOnly: f.lokalmatOnly ?? true,
         // Scope is deliberately carried over, not reset. Searching from the
         // Produsenter tab must land on Produsenter results. This was a real bug
         // in an earlier revision of the design — do not reintroduce it.
@@ -283,7 +284,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       salg: search.salg,
       sesong: search.sesong,
       radius: search.radius,
-      approvedOnly: search.approvedOnly,
+      lokalmatOnly: search.lokalmatOnly,
     }),
     [search],
   );
@@ -349,8 +350,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setProductSearch,
     productFilters,
     toggleProductFilter: (c) => setProductFilters((f) => toggleIn(f, c)),
-    onlyApproved,
-    setOnlyApproved,
+    onlyLokalmat,
+    setOnlyLokalmat,
     productSort,
     setProductSort,
     mapRadius,

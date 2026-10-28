@@ -85,6 +85,35 @@ export function ProductCard({
         style={{ background: product.tint.color }}
       >
         <Icon name={product.tint.icon} size={64} style={{ color: product.tint.ink, opacity: 0.45 }} />
+
+        {/* Lokalmat badge — marks a product registered on lokalmat.no. It sits ON
+            the photo, bottom-right, on a white pill so it survives a dark image.
+            Deliberately smaller than the reference screenshot: it is a mark of
+            provenance, not a call to action, and it must not compete with the
+            product photo. Hidden from screen readers via the wrapper's label —
+            the logo itself is decorative here.
+
+            NOT the same as the "Godkjent av REMA 1000" pill further down the
+            card. A product can carry both, one, or neither. */}
+        {product.lokalmat && (
+          <div
+            className="absolute flex items-center bg-surface pointer-events-none"
+            style={{
+              right: "var(--space-sm)",
+              bottom: "var(--space-sm)",
+              padding: "4px 8px",
+              borderRadius: "var(--radius-sm)",
+            }}
+            title="Registrert på Lokalmat.no"
+          >
+            <img
+              src={`${import.meta.env.BASE_URL}lokalmat-logo.svg`}
+              alt="Registrert på Lokalmat.no"
+              className="block"
+              style={{ width: 60 }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Body */}

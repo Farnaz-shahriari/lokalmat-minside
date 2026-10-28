@@ -44,6 +44,11 @@ export interface Product {
   approval: ApprovalState;
   fresh: "nyhet" | "oppdatert" | null;
   inSeason: boolean;
+  /** Registered on lokalmat.no — the thing the Lokalmat badge marks and the
+      «Vis kun Lokalmat produkter» switch filters on. NOT the same as `approval`,
+      which is the buyer's own chain approving the product for their shelves; a
+      product can be one, both or neither. Derived below, see the note there. */
+  lokalmat: boolean;
   /** Derived below from category + inSeason. */
   sesong: string;
 }
@@ -59,7 +64,7 @@ export interface SavedSearchFilters {
   salg: string[];
   sesong: string[];
   radius: number;
-  approvedOnly: boolean;
+  lokalmatOnly: boolean;
 }
 
 export interface SavedSearch {
@@ -814,7 +819,7 @@ const RAW_PRODUCERS: RawProducer[] = [
    "productCount": 1
   },
 ];
-type RawProduct = Omit<Product, "sesong">;
+type RawProduct = Omit<Product, "sesong" | "lokalmat">;
 
 const RAW_PRODUCTS: RawProduct[] = [
  {
@@ -2042,10 +2047,10 @@ const RAW_PRODUCTS: RawProduct[] = [
 /* Seed saved searches. emailUpdates is applied by AppState on load (false for
    seeded searches, true for newly created ones), so it is omitted here. */
 export const SAVED_SEARCHES: Omit<SavedSearch, "emailUpdates">[] = [
-  { "id":"ss1", "name":"Lokal drikke til hyllene", "count":2, "filters":{ "query":"", "cats":["Drikkevarer","Saft, syltetøy, geleer"], "fylker":[], "marked":[], "rev":[], "salg":["Grossist"], "sesong":[], "radius":900, "approvedOnly":false } },
-  { "id":"ss2", "name":"Kjøtt fra norske gårder", "count":5, "filters":{ "query":"", "cats":["Kjøtt"], "fylker":[], "marked":[], "rev":["KSL-revidert"], "salg":[], "sesong":[], "radius":900, "approvedOnly":false } },
-  { "id":"ss3", "name":"Honning og søtt i nærheten", "count":1, "filters":{ "query":"honning", "cats":[], "fylker":[], "marked":[], "rev":[], "salg":[], "sesong":[], "radius":300, "approvedOnly":false } },
-  { "id":"ss4", "name":"Øl fra mikrobryggeri", "count":1, "filters":{ "query":"øl", "cats":["Alkoholholdige drikker"], "fylker":[], "marked":["Spesialbutikk"], "salg":[], "rev":[], "sesong":[], "radius":900, "approvedOnly":false } }
+  { "id":"ss1", "name":"Lokal drikke til hyllene", "count":2, "filters":{ "query":"", "cats":["Drikkevarer","Saft, syltetøy, geleer"], "fylker":[], "marked":[], "rev":[], "salg":["Grossist"], "sesong":[], "radius":900, "lokalmatOnly":true } },
+  { "id":"ss2", "name":"Kjøtt fra norske gårder", "count":5, "filters":{ "query":"", "cats":["Kjøtt"], "fylker":[], "marked":[], "rev":["KSL-revidert"], "salg":[], "sesong":[], "radius":900, "lokalmatOnly":true } },
+  { "id":"ss3", "name":"Honning og søtt i nærheten", "count":1, "filters":{ "query":"honning", "cats":[], "fylker":[], "marked":[], "rev":[], "salg":[], "sesong":[], "radius":300, "lokalmatOnly":true } },
+  { "id":"ss4", "name":"Øl fra mikrobryggeri", "count":1, "filters":{ "query":"øl", "cats":["Alkoholholdige drikker"], "fylker":[], "marked":["Spesialbutikk"], "salg":[], "rev":[], "sesong":[], "radius":900, "lokalmatOnly":true } }
 ];
 export const COMMON_SEARCHES: string[] = ["Kjøtt og fjørfe","Lokal drikke","Økologisk melk","Kortreiste grønnsaker sesong","Sesongbaserte produkter i nærheten"];
 export const USER = { name:"Ola Nordmann", email:"ola.nordmann@rema1000.no", store:"REMA 1000", initials:"ON" };
@@ -2118,6 +2123,12 @@ export const PRODUCERS: Producer[] = RAW_PRODUCERS.map((p, i) => {
 });
 
 /* Per-product season, derived the same way the prototype derived it. */
+/* ⚠ `lokalmat` is DERIVED here, from whether the record has a lokalmat.no page.
+   That is right for this data — the real scraped products all have one and the
+   invented sample products deliberately do not — but it is NOT how production
+   should work. In production this is a field the backend owns: a product is
+   Lokalmat because it is registered in the Lokalmat scheme, not because a URL
+   happens to be present. Replace the derivation with the real field. */
 export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => {
   let sesong: string;
   if (p.inSeason) sesong = "Sommer";
@@ -2126,7 +2137,7 @@ export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => {
   else if (p.category === "Kjøtt") sesong = p.id % 2 ? "Høst" : "Vinter";
   else if (p.category === "Fisk og sjømat") sesong = "Vinter";
   else sesong = "Helårs";
-  return { ...p, sesong };
+  return { ...p, sesong, lokalmat: !!p.url };
 });
 
 /* -----------------------------------------------------------------------------

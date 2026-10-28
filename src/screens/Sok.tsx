@@ -96,12 +96,12 @@ export function Sok() {
         .filter((p) => matchProduct(p, search.query))
         .filter((p) => !search.cats.length || search.cats.includes(p.category))
         .filter((p) => !search.sesong.length || search.sesong.includes(p.sesong))
-        .filter((p) => !search.approvedOnly || p.isApproved)
+        .filter((p) => !search.lokalmatOnly || p.lokalmat)
         .filter((p) => {
           const pr = producersById.get(p.producerId);
           return pr ? producerOk(pr) : true;
         }),
-    [products, search.query, search.cats, search.sesong, search.approvedOnly, producersById, producerOk],
+    [products, search.query, search.cats, search.sesong, search.lokalmatOnly, producersById, producerOk],
   );
 
   const producerResults = useMemo(
@@ -132,8 +132,10 @@ export function Sok() {
         label: `Innen ${search.radius} km`,
         onRemove: () => setSearch({ radius: UNLIMITED_RADIUS }),
       });
-    if (search.approvedOnly)
-      chips.push({ label: "Kun godkjente", onRemove: () => setSearch({ approvedOnly: false }) });
+    /* No chip for the Lokalmat switch. Chips exist to show what is NARROWING
+       the results and to remove it in one click; this one is on by default, so
+       a permanent chip would be noise, and switching it off widens rather than
+       narrows. The switch itself sits in the sidebar, labelled. */
     return chips;
   }, [search, setSearch, toggleSearchFilter]);
 
@@ -275,12 +277,12 @@ export function Sok() {
 
           <div className="flex items-center" style={{ gap: "var(--space-sm)", margin: "0 0 var(--space-md) var(--space-xs)" }}>
             <Switch
-              id="search-approved"
-              checked={search.approvedOnly}
-              onCheckedChange={(v) => setSearch({ approvedOnly: v })}
+              id="search-lokalmat"
+              checked={search.lokalmatOnly}
+              onCheckedChange={(v) => setSearch({ lokalmatOnly: v })}
             />
-            <Label htmlFor="search-approved" className="body-medium text-on-surface cursor-pointer">
-              Vis kun godkjente produkter
+            <Label htmlFor="search-lokalmat" className="body-medium text-on-surface cursor-pointer">
+              Vis kun Lokalmat produkter
             </Label>
           </div>
 

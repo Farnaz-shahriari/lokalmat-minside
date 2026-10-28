@@ -77,6 +77,7 @@ const productColumns: Column<EnrichedProduct>[] = [
   { header: headerCell("Nå i sesong"), width: 13, cell: (p) => yesNo(p.inSeason) },
   { header: headerCell("Status"), width: 13, cell: (p) => statusLabel(p) },
   { header: headerCell("Godkjenning"), width: 16, cell: (p) => approvalLabel(p.approval) },
+  { header: headerCell("Lokalmat"), width: 11, cell: (p) => yesNo(p.lokalmat) },
   { header: headerCell("Lagret"), width: 10, cell: (p) => yesNo(p.saved) },
   { header: headerCell("Følger produsent"), width: 17, cell: (p) => yesNo(p.producerFollowed) },
   { header: headerCell("Beskrivelse"), width: 60, cell: (p) => p.description ?? "" },
@@ -122,7 +123,7 @@ function searchSheet(
     row("Salgskanaler", list(search.salg)),
     row("Sesonger", list(search.sesong)),
     row("Radius", search.radius < UNLIMITED_RADIUS ? `Innen ${search.radius} km` : "Hele landet"),
-    row("Kun godkjente", yesNo(search.approvedOnly)),
+    row("Kun Lokalmat", yesNo(search.lokalmatOnly)),
     row("Treff, produkter", counts.products),
     row("Treff, produsenter", counts.producers),
   ];
