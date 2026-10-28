@@ -107,10 +107,10 @@ export function ProductCard({
             title="Registrert på Lokalmat.no"
           >
             <img
-              src={`${import.meta.env.BASE_URL}lokalmat-logo.svg`}
+              src={`${import.meta.env.BASE_URL}lokalmat-logo-badge.svg`}
               alt="Registrert på Lokalmat.no"
               className="block"
-              style={{ width: 60 }}
+              style={{ width: 68 }}
             />
           </div>
         )}
