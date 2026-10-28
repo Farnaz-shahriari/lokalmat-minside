@@ -114,14 +114,29 @@ export function MinSide() {
 
   const inRadiusCount = mapProducers.filter((p) => p.inRadius).length;
 
-  /* This list is a TEASER, not the result set. It shows the ten nearest
+  /* This list is a TEASER, not the result set. It shows the six nearest
      producers you do not follow and hands the rest to Søk, which is the screen
      built for working through a long list — filters, facets, both scopes.
 
-     Ten is the agreed number. It is not a layout constraint: the map column
-     stretches to match whatever the list needs, so the two columns end
-     together at any count. */
-  const AREA_PREVIEW = 10;
+     The section holds a FIXED height: six rows plus the button, whether the
+     radius and the category chips leave six producers or two. That is what
+     stops the whole page from jumping as you drag the slider, and it keeps the
+     map a sensible size instead of a letterbox at one setting and a tower at
+     the next. The button shows even when everything already fits, because it
+     still does something useful — it opens the same set in Søk, where you can
+     keep narrowing it.
+
+     ROW_H tracks ProducerMini, which is a fixed height by construction: its
+     overline, title and supporting line are all single-line with ellipsis. If
+     that ever changes, this number has to change with it. */
+  const AREA_PREVIEW = 6;
+  const AREA_ROW_H = 87;
+  const AREA_GAP = 12;
+  const AREA_BUTTON_H = 56;
+  // Six rows, the gap between each of them, the gap before the button, and the
+  // button: AREA_PREVIEW + 1 gaps in total, not AREA_PREVIEW.
+  const AREA_MIN_HEIGHT =
+    AREA_PREVIEW * AREA_ROW_H + (AREA_PREVIEW + 1) * AREA_GAP + AREA_BUTTON_H;
 
   const nearbyArea = useMemo(() => {
     const inArea = producers
@@ -287,9 +302,12 @@ export function MinSide() {
             countText={unfollowedCountText(inRadiusCount)}
             onOpenProducer={(p) => openProducer(p.name)}
           />
-          <div className="flex flex-col" style={{ gap: "12px" }}>
+          <div
+            className="flex flex-col"
+            style={{ gap: `${AREA_GAP}px`, minHeight: AREA_MIN_HEIGHT }}
+          >
             {nearbyList.map((p) => (
-              <Lingering key={p.id} leaving={p.followed && areaLinger.isLeaving(p.id)} gap={12}>
+              <Lingering key={p.id} leaving={p.followed && areaLinger.isLeaving(p.id)} gap={AREA_GAP}>
                 <ProducerMini
                   producer={p}
                   onOpen={() => openProducer(p.name)}
@@ -298,16 +316,13 @@ export function MinSide() {
               </Lingering>
             ))}
 
-            {nearbyArea.total > AREA_PREVIEW && (
-              <Button
-                variant="secondary"
-                className="w-full"
-                style={{ marginTop: "var(--space-xs)" }}
-                onClick={showAllNearby}
-              >
-                Vis alle {nearbyArea.total} produsenter
-              </Button>
-            )}
+            {/* Pushes the button to the bottom of the fixed block, so it lines
+                up with the foot of the map however many rows are above it. */}
+            <div className="flex-1" />
+
+            <Button variant="secondary" className="w-full" onClick={showAllNearby}>
+              Vis alle {nearbyArea.total} produsenter
+            </Button>
           </div>
         </div>
       </section>
