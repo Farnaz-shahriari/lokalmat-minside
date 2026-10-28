@@ -70,8 +70,8 @@ export function LagredeSok() {
                   </span>
                   <div className="flex flex-wrap items-center" style={{ gap: "var(--space-xs)" }}>
                     {/* Summary pills: query in guillemets first, then each selected
-                        filter in group order, then radius, then approved-only.
-                        Truncated to 6. */}
+                        filter in group order, then radius, then the Lokalmat
+                        switch when it is OFF. Truncated to 6. */}
                     {summarizeFilters(s.filters).map((f) => (
                       <span
                         key={f}
