@@ -1,14 +1,13 @@
 /* Screen 1 — Min side (home).
    Five stacked sections, 40px (space-xl) apart. */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SectionHeading } from "../components/SectionHeading";
 import { SavedSearchCard } from "../components/SavedSearchCard";
 import { ScopeTabs } from "../components/ScopeTabs";
 import { CategoryChips } from "../components/CategoryChips";
 import { PillSearch } from "../components/PillSearch";
-import { ScrollColumn } from "../components/ScrollColumn";
 import { MapPanel, type MapProducer } from "../components/MapPanel";
 import { ProducerMini } from "../components/ProducerMini";
 import { ProductCard } from "../components/ProductCard";
@@ -107,19 +106,6 @@ export function MinSide() {
      that lingers, showing its new followed state before it collapses away. */
   const unfollowed = useMemo(() => producers.filter((p) => !p.followed), [producers]);
 
-  /* The list beside the map is capped at the map's own height, measured rather
-     than hardcoded so the two cannot drift apart when the map panel or its
-     radius footer changes. Undefined on the first paint; the list is uncapped
-     for that one frame, which is not visible. */
-  const mapCol = useRef<HTMLDivElement>(null);
-  const [mapHeight, setMapHeight] = useState<number>();
-  useEffect(() => {
-    const el = mapCol.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setMapHeight(el.getBoundingClientRect().height));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
 
   const mapProducers: MapProducer[] = useMemo(
     () => unfollowed.map((p) => ({ ...p, inRadius: p.distance <= mapRadius })),
@@ -128,21 +114,47 @@ export function MinSide() {
 
   const inRadiusCount = mapProducers.filter((p) => p.inRadius).length;
 
-  const nearbyList = useMemo(() => {
+  /* This list is a TEASER, not the result set. It shows the ten nearest
+     producers you do not follow and hands the rest to Søk, which is the screen
+     built for working through a long list — filters, facets, both scopes.
+
+     Ten is the agreed number. It is not a layout constraint: the map column
+     stretches to match whatever the list needs, so the two columns end
+     together at any count. */
+  const AREA_PREVIEW = 10;
+
+  const nearbyArea = useMemo(() => {
     const inArea = producers
       .filter((p) => p.distance <= mapRadius)
       .filter((p) => !mapCats.length || p.categories.some((c) => mapCats.includes(c)))
       .sort((a, b) => a.distance - b.distance);
 
-    /* Every unfollowed producer in the radius is listed. There used to be a
-       hard cap of 8 rows here, which was really a workaround for the column
-       growing taller than the map beside it — ScrollColumn caps the height
-       directly now, so the cap can go and the radius slider means what it says.
-       Followed producers stay out of the list unless they are mid-linger. */
-    return inArea.filter((p) => (p.followed ? areaLinger.isLingering(p.id) : true));
+    // Followed producers stay out unless they are mid-linger, so a row you just
+    // followed can show its new state before it collapses away.
+    const visible = inArea.filter((p) => (p.followed ? areaLinger.isLingering(p.id) : true));
+    return { visible, total: inArea.filter((p) => !p.followed).length };
     // areaLinger.version changes when a hold starts or ends.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [producers, mapRadius, mapCats, areaLinger.version, areaLinger.isLingering]);
+
+  const nearbyList = nearbyArea.visible.slice(0, AREA_PREVIEW);
+
+  /* "Vis alle N produsenter" hands Min side's state to Søk: the radius from the
+     slider, the category chips from this section, and the fact that the whole
+     list is about producers you do NOT follow yet. Without that last one you
+     would arrive at a list padded with producers you already follow — the
+     opposite of what you clicked. */
+  function showAllNearby() {
+    openSearch({
+      ...emptyFilters(),
+      radius: mapRadius,
+      cats: [...mapCats],
+      unfollowedOnly: true,
+    });
+    setSearch({ scope: "produsenter" });
+    navigate("/sok");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
 
   /* ---- d. Oppdateringer: one product per followed producer, preferring
             something new / updated / in season. ---------------------------- */
@@ -260,25 +272,22 @@ export function MinSide() {
             onToggle={toggleMapCat}
           />
         </div>
+        {/* items-stretch, not items-start: the map grows to whatever height the
+            list needs, so the columns always end on the same line. This is what
+            keeps the section tidy now that the list is a fixed ten rows instead
+            of a scroller. */}
         <div
-          className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] items-start"
+          className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] items-stretch"
           style={{ gap: "var(--space-lg)" }}
         >
-          <div ref={mapCol}>
-            <MapPanel
-              producers={mapProducers}
-              radius={mapRadius}
-              onRadiusChange={setMapRadius}
-              countText={unfollowedCountText(inRadiusCount)}
-              onOpenProducer={(p) => openProducer(p.name)}
-            />
-          </div>
-          <ScrollColumn
-            maxHeight={mapHeight}
-            label="Produsenter i ditt område"
-            className="flex flex-col"
-            style={{ gap: "12px" }}
-          >
+          <MapPanel
+            producers={mapProducers}
+            radius={mapRadius}
+            onRadiusChange={setMapRadius}
+            countText={unfollowedCountText(inRadiusCount)}
+            onOpenProducer={(p) => openProducer(p.name)}
+          />
+          <div className="flex flex-col" style={{ gap: "12px" }}>
             {nearbyList.map((p) => (
               <Lingering key={p.id} leaving={p.followed && areaLinger.isLeaving(p.id)} gap={12}>
                 <ProducerMini
@@ -288,7 +297,18 @@ export function MinSide() {
                 />
               </Lingering>
             ))}
-          </ScrollColumn>
+
+            {nearbyArea.total > AREA_PREVIEW && (
+              <Button
+                variant="secondary"
+                className="w-full"
+                style={{ marginTop: "var(--space-xs)" }}
+                onClick={showAllNearby}
+              >
+                Vis alle {nearbyArea.total} produsenter
+              </Button>
+            )}
+          </div>
         </div>
       </section>
 

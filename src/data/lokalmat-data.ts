@@ -65,6 +65,10 @@ export interface SavedSearchFilters {
   sesong: string[];
   radius: number;
   lokalmatOnly: boolean;
+  /** Produsenter-tab only: hide producers the buyer already follows. Set when
+      you arrive from "Vis alle N produsenter" on Min side, where the whole
+      point of the list is who you are NOT following yet. */
+  unfollowedOnly: boolean;
 }
 
 export interface SavedSearch {
@@ -2047,10 +2051,10 @@ const RAW_PRODUCTS: RawProduct[] = [
 /* Seed saved searches. emailUpdates is applied by AppState on load (false for
    seeded searches, true for newly created ones), so it is omitted here. */
 export const SAVED_SEARCHES: Omit<SavedSearch, "emailUpdates">[] = [
-  { "id":"ss1", "name":"Lokal drikke til hyllene", "count":2, "filters":{ "query":"", "cats":["Drikkevarer","Saft, syltetøy, geleer"], "fylker":[], "marked":[], "rev":[], "salg":["Grossist"], "sesong":[], "radius":900, "lokalmatOnly":true } },
-  { "id":"ss2", "name":"Kjøtt fra norske gårder", "count":5, "filters":{ "query":"", "cats":["Kjøtt"], "fylker":[], "marked":[], "rev":["KSL-revidert"], "salg":[], "sesong":[], "radius":900, "lokalmatOnly":true } },
-  { "id":"ss3", "name":"Honning og søtt i nærheten", "count":1, "filters":{ "query":"honning", "cats":[], "fylker":[], "marked":[], "rev":[], "salg":[], "sesong":[], "radius":300, "lokalmatOnly":true } },
-  { "id":"ss4", "name":"Øl fra mikrobryggeri", "count":1, "filters":{ "query":"øl", "cats":["Alkoholholdige drikker"], "fylker":[], "marked":["Spesialbutikk"], "salg":[], "rev":[], "sesong":[], "radius":900, "lokalmatOnly":true } }
+  { "id":"ss1", "name":"Lokal drikke til hyllene", "count":2, "filters":{ "query":"", "cats":["Drikkevarer","Saft, syltetøy, geleer"], "fylker":[], "marked":[], "rev":[], "salg":["Grossist"], "sesong":[], "radius":900, "lokalmatOnly":true, "unfollowedOnly":false } },
+  { "id":"ss2", "name":"Kjøtt fra norske gårder", "count":5, "filters":{ "query":"", "cats":["Kjøtt"], "fylker":[], "marked":[], "rev":["KSL-revidert"], "salg":[], "sesong":[], "radius":900, "lokalmatOnly":true, "unfollowedOnly":false } },
+  { "id":"ss3", "name":"Honning og søtt i nærheten", "count":1, "filters":{ "query":"honning", "cats":[], "fylker":[], "marked":[], "rev":[], "salg":[], "sesong":[], "radius":300, "lokalmatOnly":true, "unfollowedOnly":false } },
+  { "id":"ss4", "name":"Øl fra mikrobryggeri", "count":1, "filters":{ "query":"øl", "cats":["Alkoholholdige drikker"], "fylker":[], "marked":["Spesialbutikk"], "salg":[], "rev":[], "sesong":[], "radius":900, "lokalmatOnly":true, "unfollowedOnly":false } }
 ];
 export const COMMON_SEARCHES: string[] = ["Kjøtt og fjørfe","Lokal drikke","Økologisk melk","Kortreiste grønnsaker sesong","Sesongbaserte produkter i nærheten"];
 export const USER = { name:"Ola Nordmann", email:"ola.nordmann@rema1000.no", store:"REMA 1000", initials:"ON" };

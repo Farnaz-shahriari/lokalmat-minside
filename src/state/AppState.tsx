@@ -111,6 +111,7 @@ const emptySearchState = (): SearchState => ({
   sesong: [],
   radius: 900,
   lokalmatOnly: true,
+  unfollowedOnly: false,
   scope: "produkter",
   activeSaved: null,
 });
@@ -254,6 +255,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         sesong: [...(f.sesong || [])],
         radius: f.radius || 900,
         lokalmatOnly: f.lokalmatOnly ?? true,
+        unfollowedOnly: !!f.unfollowedOnly,
         // Scope is deliberately carried over, not reset. Searching from the
         // Produsenter tab must land on Produsenter results. This was a real bug
         // in an earlier revision of the design — do not reintroduce it.
@@ -285,6 +287,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       sesong: search.sesong,
       radius: search.radius,
       lokalmatOnly: search.lokalmatOnly,
+      unfollowedOnly: search.unfollowedOnly,
     }),
     [search],
   );

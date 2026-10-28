@@ -124,6 +124,7 @@ function searchSheet(
     row("Sesonger", list(search.sesong)),
     row("Radius", search.radius < UNLIMITED_RADIUS ? `Innen ${search.radius} km` : "Hele landet"),
     row("Kun Lokalmat", yesNo(search.lokalmatOnly)),
+    row("Kun produsenter jeg ikke følger", yesNo(search.unfollowedOnly)),
     row("Treff, produkter", counts.products),
     row("Treff, produsenter", counts.producers),
   ];

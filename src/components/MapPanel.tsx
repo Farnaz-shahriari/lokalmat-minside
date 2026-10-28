@@ -119,6 +119,15 @@ export function MapPanel({
   onOpenProducer?: (p: MapProducer) => void;
 }) {
   const el = useRef<HTMLDivElement>(null);
+  /* MapLibre caches the canvas size, so a container that grows or shrinks
+     leaves the map rendering at its old size until it is told. */
+  useEffect(() => {
+    const node = el.current;
+    if (!node) return;
+    const ro = new ResizeObserver(() => map.current?.resize());
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, []);
   const map = useRef<maplibregl.Map | null>(null);
   const ready = useRef(false);
   const [failed, setFailed] = useState(false);
@@ -263,19 +272,23 @@ export function MapPanel({
   }, [producers]);
 
   return (
+    /* h-full: the panel stretches to whatever height the producer list beside it
+       needs (see MinSide). The canvas takes the slack, the radius footer keeps
+       its natural height, and min-h on the canvas is the floor for short lists
+       and for every other screen that uses this panel. */
     <div
-      className="flex flex-col w-full overflow-hidden bg-surface border border-outline-variant"
+      className="flex flex-col w-full h-full overflow-hidden bg-surface border border-outline-variant"
       style={{ borderRadius: "var(--radius-card)" }}
     >
       {failed ? (
-        <div className="w-full h-[392px] bg-surface-container flex flex-col items-center justify-center gap-2.5 px-6 text-center">
+        <div className="w-full flex-1 min-h-[392px] bg-surface-container flex flex-col items-center justify-center gap-2.5 px-6 text-center">
           <Icon name="map" size={44} className="text-on-surface-variant" />
           <p className="body-medium text-on-surface-variant m-0 max-w-[280px]">
             Kartet kunne ikke lastes. Bruk radiusvelgeren under for å filtrere på avstand.
           </p>
         </div>
       ) : (
-        <div ref={el} className="w-full h-[392px] bg-surface-container" />
+        <div ref={el} className="w-full flex-1 min-h-[392px] bg-surface-container" />
       )}
 
       <div

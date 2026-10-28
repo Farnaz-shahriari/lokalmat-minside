@@ -104,9 +104,22 @@ export function Sok() {
     [products, search.query, search.cats, search.sesong, search.lokalmatOnly, producersById, producerOk],
   );
 
+  /* producerOk is the SHARED gate (distance + the four facet groups) — it also
+     decides which products survive, via their producer. These two filters are
+     producer-only and must not reach the Produkter tab, so they live here:
+
+     - cats: on the Produkter tab a category filters the PRODUCT's own category.
+       On Produsenter it has to mean "produsenter who sell in this category",
+       otherwise the category chips carried over from Min side do nothing here.
+     - unfollowedOnly: set when you arrive from "Vis alle N produsenter". */
   const producerResults = useMemo(
-    () => producers.filter((p) => matchProducer(p, search.query)).filter(producerOk),
-    [producers, search.query, producerOk],
+    () =>
+      producers
+        .filter((p) => matchProducer(p, search.query))
+        .filter(producerOk)
+        .filter((p) => !search.cats.length || p.categories.some((c) => search.cats.includes(c)))
+        .filter((p) => !search.unfollowedOnly || !p.followed),
+    [producers, search.query, producerOk, search.cats, search.unfollowedOnly],
   );
 
   const mapProducers: MapProducer[] = useMemo(
@@ -131,6 +144,11 @@ export function Sok() {
       chips.push({
         label: `Innen ${search.radius} km`,
         onRemove: () => setSearch({ radius: UNLIMITED_RADIUS }),
+      });
+    if (search.unfollowedOnly)
+      chips.push({
+        label: "Produsenter jeg ikke følger",
+        onRemove: () => setSearch({ unfollowedOnly: false }),
       });
     /* No chip for the Lokalmat switch. Chips exist to show what is NARROWING
        the results and to remove it in one click; this one is on by default, so
@@ -285,6 +303,21 @@ export function Sok() {
               Vis kun Lokalmat produkter
             </Label>
           </div>
+
+          {/* Produsenter only. Showing a producer filter while you are looking at
+              products would be a control that visibly does nothing. */}
+          {!isProdukter && (
+            <div className="flex items-center" style={{ gap: "var(--space-sm)", margin: "0 0 var(--space-md) var(--space-xs)" }}>
+              <Switch
+                id="search-unfollowed"
+                checked={search.unfollowedOnly}
+                onCheckedChange={(v) => setSearch({ unfollowedOnly: v })}
+              />
+              <Label htmlFor="search-unfollowed" className="body-medium text-on-surface cursor-pointer">
+                Vis kun produsenter jeg ikke følger
+              </Label>
+            </div>
+          )}
 
           <MapPanel
             producers={mapProducers}

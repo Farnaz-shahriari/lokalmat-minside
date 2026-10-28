@@ -74,6 +74,7 @@ export function emptyFilters(): SavedSearchFilters {
     // ON by default: the buyer is on lokalmat.no, so Lokalmat products are the
     // expected set. Switching it OFF widens the results, it does not narrow them.
     lokalmatOnly: true,
+    unfollowedOnly: false,
   };
 }
 
@@ -94,6 +95,7 @@ export function normalizeFilters(f: Partial<SavedSearchFilters>): SavedSearchFil
     sesong: [...(f.sesong || [])].sort(),
     radius: f.radius ?? e.radius,
     lokalmatOnly: f.lokalmatOnly ?? e.lokalmatOnly,
+    unfollowedOnly: !!f.unfollowedOnly,
   };
 }
 
@@ -121,6 +123,7 @@ export function summarizeFilters(f: SavedSearchFilters): string[] {
   // Lokalmat-only is the default, so the pill marks the DEVIATION: a saved
   // search that deliberately reaches wider than lokalmat.no.
   if (!f.lokalmatOnly) out.push("Alle produkter");
+  if (f.unfollowedOnly) out.push("Ikke fulgt");
   return out.slice(0, 6);
 }
 
