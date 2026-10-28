@@ -62,6 +62,18 @@ export interface MapProducer extends EnrichedProducer {
  * primitive the way Leaflet does, so the radius overlay is drawn as a polygon
  * sampled around the centre. 96 steps is smooth at every zoom this map uses.
  */
+/* The bounding box of the radius circle. Used to frame the map on the area the
+   buyer actually selected, instead of leaving it at a fixed zoom where 30 km is
+   a dot in the middle of Scandinavia and 900 km runs off the edge. */
+function circleBounds(lat: number, lng: number, km: number): [[number, number], [number, number]] {
+  const dLat = km / 111.32;
+  const dLng = km / (111.32 * Math.cos((lat * Math.PI) / 180));
+  return [
+    [lng - dLng, lat - dLat],
+    [lng + dLng, lat + dLat],
+  ];
+}
+
 function circlePolygon(
   lat: number,
   lng: number,
@@ -119,14 +131,32 @@ export function MapPanel({
   onOpenProducer?: (p: MapProducer) => void;
 }) {
   const el = useRef<HTMLDivElement>(null);
+  const radiusRef = useRef(radius);
+  radiusRef.current = radius;
+
+  /** Frame the map on the current radius circle. Padding keeps the ring off
+      the edge; `duration` 0 is used for the first fit and for resizes, where an
+      animation would read as a glitch rather than a response. */
+  const fitToRadius = (duration: number) => {
+    map.current?.fitBounds(circleBounds(MAP_CENTER.lat, MAP_CENTER.lng, radiusRef.current), {
+      padding: 28,
+      duration,
+    });
+  };
+
   /* MapLibre caches the canvas size, so a container that grows or shrinks
-     leaves the map rendering at its old size until it is told. */
+     leaves the map rendering at its old size until it is told — and once it has
+     resized, the framing has to be redone or the circle sits off-centre. */
   useEffect(() => {
     const node = el.current;
     if (!node) return;
-    const ro = new ResizeObserver(() => map.current?.resize());
+    const ro = new ResizeObserver(() => {
+      map.current?.resize();
+      if (ready.current) fitToRadius(0);
+    });
     ro.observe(node);
     return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const map = useRef<maplibregl.Map | null>(null);
   const ready = useRef(false);
@@ -247,6 +277,8 @@ export function MapPanel({
       // The container is inside a flex/grid parent, so give it one nudge after
       // layout settles. MapLibre also watches the container itself.
       m.resize();
+      // First frame: land on the radius, not on the hardcoded zoom.
+      fitToRadius(0);
     });
 
     return () => {
@@ -257,11 +289,19 @@ export function MapPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // --- radius circle follows the slider ---
+  /* --- the circle, and the frame around it, follow the slider ---
+     Refitting on every change is what makes the slider feel like it does
+     something: drag it in and the map closes on your own region, drag it out
+     and the country opens up. It is also what makes the panel survive being
+     stretched tall beside the producer list — without it, extra height just
+     buys more sea and more of Germany. */
   useEffect(() => {
     if (!ready.current) return;
     const src = map.current?.getSource("radius") as maplibregl.GeoJSONSource | undefined;
     src?.setData(circlePolygon(MAP_CENTER.lat, MAP_CENTER.lng, radius));
+    fitToRadius(360);
+    // fitToRadius is a stable ref-based helper.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [radius]);
 
   // --- producer markers follow the data ---
